@@ -1,0 +1,44 @@
+﻿@using RaceRetreat.Blazor.Helpers
+@using RaceRetreat.Contracts
+
+@page "/"
+@inject PlaysHelper _playsHelper
+
+<h1>Involved RaceRetreat 16 december 2022</h1>
+
+<p>Welkom op de Involved RaceRetreat! Een variatie op onze oude MazeRetreat waarbij je een algoritme moet schrijven om een race te winnen.</p>
+<p>Voor de source-code: <a href="https://github.com/Djohnnie/Involved-CodeRetreat-2022-RaceRetreat" target="_blank">Djohnnie/Involved-CodeRetreat-2022-RaceRetreat</a></p>
+<p>Gebruik Swagger om de API aan te spreken: <a href="swagger" target="_blank">Swagger</a></p>
+
+@if (_getPlayersResponse == null)
+{
+    <p><em>Bezig met laden van data...</em></p>
+}
+else if (_getPlayersResponse.Count == 0)
+{
+    <p><em>Nog geen spelers hebben een race gereden!</em></p>
+}
+else
+{
+    <p>
+        @foreach (var player in _getPlayersResponse)
+        {
+            var cssClass = $"solutionColor{player.Index}";
+            <span class="@cssClass"> [ @player.PlayerName ] </span>
+        }
+    </p>
+}
+
+<div>
+    <img src="_api/images/map-0" />
+</div>
+
+@code
+{
+    private GetPlayersResponse _getPlayersResponse;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _getPlayersResponse = await _playsHelper.GetPlayers();
+    }
+}
