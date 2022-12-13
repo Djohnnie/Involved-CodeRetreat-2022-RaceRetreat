@@ -1,36 +1,43 @@
 ﻿using RaceRetreat.Contracts;
-using System.Text.Json;
 
 namespace RaceRetreat.Blazor.Helpers;
 
 public class PlaysHelper
 {
+    private readonly AzureTableHelper _azureTableHelper;
+
+    public PlaysHelper(AzureTableHelper azureTableHelper)
+    {
+        _azureTableHelper = azureTableHelper;
+    }
+
     public async Task<GetPlayersResponse> GetPlayers()
     {
-        //var playerNames = await _dbContext.Plays.Select(x => x.PlayerName)
-        //    .Distinct().OrderBy(x => x).ToListAsync();
-
         var players = new GetPlayersResponse();
 
-        //for (int i = 0; i < playerNames.Count; i++)
-        //{
-        //    players.Add(new Player { Index = i + 1, PlayerName = playerNames[i] });
-        //}
+        await foreach (var player in _azureTableHelper.GetPlayers())
+        {
+            players.Add(new Player
+            {
+                Index = 1,
+                PlayerName = player.RowKey
+            });
+        }
 
         return players;
     }
 
     public async Task<GetPlayersResponse> GetPlayersByLevel(string levelName)
     {
-        //var playerNames = await _dbContext.Plays.Where(
-        //    x => x.LevelName == levelName).Select(x => x.PlayerName).Distinct().ToListAsync();
-
         var players = new GetPlayersResponse();
 
-        //for (int i = 0; i < playerNames.Count; i++)
-        //{
-        //    players.Add(new Player { Index = i + 1, PlayerName = playerNames[i] });
-        //}
+        await foreach (var player in _azureTableHelper.GetPlayers())
+        {
+            players.Add(new Player
+            {
+                PlayerName = player.RowKey
+            });
+        }
 
         return players;
     }

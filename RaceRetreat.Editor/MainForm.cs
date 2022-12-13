@@ -78,6 +78,10 @@ public partial class MainForm : Form
         mapEditor.CreateNew();
         mapWidthToolStripTextBox.Text = $"{mapEditor.MapWidth}";
         mapHeightToolStripTextBox.Text = $"{mapEditor.MapHeight}";
+        roundsToolStripTextBox.Text = $"{mapEditor.Rounds}";
+        timeToolStripTextBox.Text = $"{mapEditor.TimePerRound}";
+        rockToolStripTextBox.Text = $"{mapEditor.OilPerPlayer}";
+        oilToolStripTextBox.Text = $"{mapEditor.RocksPerPlayer}";
     }
 
     private async void openToolStripButton_Click(object sender, EventArgs e)
@@ -90,6 +94,10 @@ public partial class MainForm : Form
             mapEditor.OpenExisting(data);
             mapWidthToolStripTextBox.Text = $"{mapEditor.MapWidth}";
             mapHeightToolStripTextBox.Text = $"{mapEditor.MapHeight}";
+            roundsToolStripTextBox.Text = $"{mapEditor.Rounds}";
+            timeToolStripTextBox.Text = $"{mapEditor.TimePerRound}";
+            rockToolStripTextBox.Text = $"{mapEditor.OilPerPlayer}";
+            oilToolStripTextBox.Text = $"{mapEditor.RocksPerPlayer}";
         }
     }
 
@@ -118,6 +126,42 @@ public partial class MainForm : Form
         try
         {
             mapEditor.MapHeight = Convert.ToInt32(mapHeightToolStripTextBox.Text);
+        }
+        catch { }
+    }
+
+    private void roundsToolStripTextBox_TextChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            mapEditor.Rounds = Convert.ToInt32(roundsToolStripTextBox.Text);
+        }
+        catch { }
+    }
+
+    private void timeToolStripTextBox_TextChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            mapEditor.TimePerRound = Convert.ToInt32(timeToolStripTextBox.Text);
+        }
+        catch { }
+    }
+
+    private void oilToolStripTextBox_TextChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            mapEditor.OilPerPlayer = Convert.ToInt32(oilToolStripTextBox.Text);
+        }
+        catch { }
+    }
+
+    private void rockToolStripTextBox_TextChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            mapEditor.RocksPerPlayer = Convert.ToInt32(rockToolStripTextBox.Text);
         }
         catch { }
     }

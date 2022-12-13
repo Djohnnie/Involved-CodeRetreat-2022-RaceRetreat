@@ -31,6 +31,42 @@ public partial class EditorControl : UserControl
         }
     }
 
+    public int Rounds
+    {
+        get { return _map.Rounds; }
+        set
+        {
+            _map.Rounds = value;
+        }
+    }
+
+    public int TimePerRound
+    {
+        get { return _map.TimePerRound; }
+        set
+        {
+            _map.TimePerRound = value;
+        }
+    }
+
+    public int OilPerPlayer
+    {
+        get { return _map.OilPerPlayer; }
+        set
+        {
+            _map.OilPerPlayer = value;
+        }
+    }
+
+    public int RocksPerPlayer
+    {
+        get { return _map.RocksPerPlayer; }
+        set
+        {
+            _map.RocksPerPlayer = value;
+        }
+    }
+
     public EditorControl()
     {
         InitializeComponent();
@@ -50,7 +86,7 @@ public partial class EditorControl : UserControl
 
         e.Graphics.Clear(Color.White);
 
-        foreach (var mazeTile in _map)
+        foreach (var mazeTile in _map.Tiles)
         {
             if (mazeTile.IsUsed)
             {
@@ -143,7 +179,7 @@ public partial class EditorControl : UserControl
 
     private RaceTile GetRaceTileFromLocation(Point location)
     {
-        foreach (var tile in _map)
+        foreach (var tile in _map.Tiles)
         {
             var bounds = CalculateBounds(tile.X, tile.Y);
 
@@ -189,6 +225,10 @@ public partial class EditorControl : UserControl
     internal void CreateNew()
     {
         _map = new RaceMap(16, 10);
+        Rounds = 0;
+        TimePerRound = 0;
+        OilPerPlayer = 0;
+        RocksPerPlayer = 0;
         Invalidate();
     }
 

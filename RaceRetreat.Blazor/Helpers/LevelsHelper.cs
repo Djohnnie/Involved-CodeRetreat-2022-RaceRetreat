@@ -11,7 +11,7 @@ public class LevelsHelper
         var mapResourceName = BuildMapResourceName(mapName);
         var mapJson = EmbeddedResourceHelper.GetMapByResourceName(mapResourceName);
         var map = JsonSerializer.Deserialize<RaceMap>(mapJson);
-        map.RemoveAll(x => !x.IsUsed);
+        map.Tiles.RemoveAll(x => !x.IsUsed);
 
         return Task.FromResult(new GetLevelByNameResponse
         {

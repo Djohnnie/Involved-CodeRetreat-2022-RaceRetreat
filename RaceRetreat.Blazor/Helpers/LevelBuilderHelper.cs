@@ -48,7 +48,7 @@ public class LevelBuilderHelper
                 var backgroundColor = Rgba32.ParseHex("#ffffff");
                 imageContext.BackgroundColor(backgroundColor);
 
-                foreach (var tile in map)
+                foreach (var tile in map.Tiles)
                 {
                     if (tile.IsUsed)
                     {
@@ -221,7 +221,7 @@ public class LevelBuilderHelper
         {
             var color = GenerateColorByIndex(play.Index);
             var actualPoints = new List<PointF>();
-            var start = map.Single(x => x.Kind == TileKind.R1_00);
+            var start = map.Tiles.Single(x => x.Kind == TileKind.R1_00);
             var lastPoint = new Point(start.X, start.Y);
 
             var tileLocation = CalculateBounds(lastPoint.X, lastPoint.Y);

@@ -51,21 +51,5 @@ else
         _getPlayersResponse = await _playsHelper.GetPlayersByLevel("map-1");
 
         RunTimer();
-
-        //using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
-
-        //while (await timer.WaitForNextTickAsync())
-        //{
-        //    Console.WriteLine($"Timer EVENT @ {DateTime.Now:HH:mm:ss}");
-        //}
-        //_ = Task.Run(async () =>
-        //{
-        //    await Task.Delay(10000);
-
-        //    if (_navigationManager.Uri.Contains("map1"))
-        //    {
-        //        _navigationManager.NavigateTo("/map1", true);
-        //    }
-        //});
     }
 }

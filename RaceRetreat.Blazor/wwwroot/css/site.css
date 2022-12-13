@@ -38,6 +38,51 @@ a, .btn-link {
     color: red;
 }
 
+.solutionColor1 {
+    font-size: 16pt;
+    color: blue;
+}
+
+.solutionColor2 {
+    font-size: 16pt;
+    color: red;
+}
+
+.solutionColor3 {
+    font-size: 16pt;
+    color: yellow;
+}
+
+.solutionColor4 {
+    font-size: 16pt;
+    color: purple;
+}
+
+.solutionColor5 {
+    font-size: 16pt;
+    color: green;
+}
+
+.solutionColor6 {
+    font-size: 16pt;
+    color: bisque;
+}
+
+.solutionColor7 {
+    font-size: 16pt;
+    color: brown;
+}
+
+.solutionColor8 {
+    font-size: 16pt;
+    color: cyan;
+}
+
+.solutionColor9 {
+    font-size: 16pt;
+    color: magenta;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

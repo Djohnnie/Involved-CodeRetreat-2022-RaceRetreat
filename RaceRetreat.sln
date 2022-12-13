@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceRetreat.Editor", "RaceR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceRetreat.Domain", "RaceRetreat.Domain\RaceRetreat.Domain.csproj", "{007E0A64-323D-4AFE-BD01-4A05512620A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceRetreat.Blazor", "RaceRetreat.Blazor\RaceRetreat.Blazor.csproj", "{2053367D-F39A-44B2-9215-102AB07BE07D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceRetreat.Blazor", "RaceRetreat.Blazor\RaceRetreat.Blazor.csproj", "{2053367D-F39A-44B2-9215-102AB07BE07D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceRetreat.Contracts", "RaceRetreat.Contracts\RaceRetreat.Contracts.csproj", "{3D8C8A88-D010-425F-BCB7-32234587697D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceRetreat.Contracts", "RaceRetreat.Contracts\RaceRetreat.Contracts.csproj", "{3D8C8A88-D010-425F-BCB7-32234587697D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceRetreat.Client", "RaceRetreat.Client\RaceRetreat.Client.csproj", "{79E190A2-52BD-4F0A-B78B-6441A4928D4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{3D8C8A88-D010-425F-BCB7-32234587697D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D8C8A88-D010-425F-BCB7-32234587697D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D8C8A88-D010-425F-BCB7-32234587697D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79E190A2-52BD-4F0A-B78B-6441A4928D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E190A2-52BD-4F0A-B78B-6441A4928D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E190A2-52BD-4F0A-B78B-6441A4928D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E190A2-52BD-4F0A-B78B-6441A4928D4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

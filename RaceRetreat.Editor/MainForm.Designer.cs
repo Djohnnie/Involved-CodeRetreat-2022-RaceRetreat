@@ -43,6 +43,15 @@
             this.roads2DropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.roads3DropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.overlayDropDownButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.roundsToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.timeToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.oilToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
+            this.rockToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +65,7 @@
             this.mapEditor.MapWidth = 16;
             this.mapEditor.Name = "mapEditor";
             this.mapEditor.Padding = new System.Windows.Forms.Padding(10);
-            this.mapEditor.Size = new System.Drawing.Size(1812, 1044);
+            this.mapEditor.Size = new System.Drawing.Size(2483, 1044);
             this.mapEditor.TabIndex = 0;
             // 
             // toolStrip
@@ -76,11 +85,20 @@
             this.roads1DropDownButton,
             this.roads2DropDownButton,
             this.roads3DropDownButton,
-            this.overlayDropDownButton});
+            this.overlayDropDownButton,
+            this.toolStripSeparator3,
+            this.toolStripLabel3,
+            this.roundsToolStripTextBox,
+            this.toolStripLabel4,
+            this.timeToolStripTextBox,
+            this.toolStripLabel5,
+            this.oilToolStripTextBox,
+            this.toolStripLabel6,
+            this.rockToolStripTextBox});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(10);
-            this.toolStrip.Size = new System.Drawing.Size(1812, 94);
+            this.toolStrip.Size = new System.Drawing.Size(2483, 94);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -198,11 +216,69 @@
             this.overlayDropDownButton.Size = new System.Drawing.Size(86, 74);
             this.overlayDropDownButton.Text = "toolStripDropDownButton1";
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(30, 0, 30, 0);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 74);
+            // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(98, 68);
+            this.toolStripLabel3.Text = "Rounds:";
+            // 
+            // roundsToolStripTextBox
+            // 
+            this.roundsToolStripTextBox.Name = "roundsToolStripTextBox";
+            this.roundsToolStripTextBox.Size = new System.Drawing.Size(100, 74);
+            this.roundsToolStripTextBox.Text = "16";
+            this.roundsToolStripTextBox.TextChanged += new System.EventHandler(this.roundsToolStripTextBox_TextChanged);
+            // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(185, 68);
+            this.toolStripLabel4.Text = "Time per round:";
+            // 
+            // timeToolStripTextBox
+            // 
+            this.timeToolStripTextBox.Name = "timeToolStripTextBox";
+            this.timeToolStripTextBox.Size = new System.Drawing.Size(100, 74);
+            this.timeToolStripTextBox.Text = "16";
+            this.timeToolStripTextBox.TextChanged += new System.EventHandler(this.timeToolStripTextBox_TextChanged);
+            // 
+            // toolStripLabel5
+            // 
+            this.toolStripLabel5.Name = "toolStripLabel5";
+            this.toolStripLabel5.Size = new System.Drawing.Size(206, 68);
+            this.toolStripLabel5.Text = "Oil /game /player:";
+            // 
+            // oilToolStripTextBox
+            // 
+            this.oilToolStripTextBox.Name = "oilToolStripTextBox";
+            this.oilToolStripTextBox.Size = new System.Drawing.Size(100, 74);
+            this.oilToolStripTextBox.Text = "16";
+            this.oilToolStripTextBox.TextChanged += new System.EventHandler(this.oilToolStripTextBox_TextChanged);
+            // 
+            // toolStripLabel6
+            // 
+            this.toolStripLabel6.Name = "toolStripLabel6";
+            this.toolStripLabel6.Size = new System.Drawing.Size(226, 68);
+            this.toolStripLabel6.Text = "Rock /game /player:";
+            // 
+            // rockToolStripTextBox
+            // 
+            this.rockToolStripTextBox.Name = "rockToolStripTextBox";
+            this.rockToolStripTextBox.Size = new System.Drawing.Size(100, 74);
+            this.rockToolStripTextBox.Text = "16";
+            this.rockToolStripTextBox.TextChanged += new System.EventHandler(this.rockToolStripTextBox_TextChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1812, 1138);
+            this.ClientSize = new System.Drawing.Size(2483, 1138);
             this.Controls.Add(this.mapEditor);
             this.Controls.Add(this.toolStrip);
             this.Name = "MainForm";
@@ -233,5 +309,14 @@
         private ToolStripTextBox mapHeightToolStripTextBox;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripDropDownButton overlayDropDownButton;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripLabel toolStripLabel3;
+        private ToolStripTextBox roundsToolStripTextBox;
+        private ToolStripLabel toolStripLabel4;
+        private ToolStripTextBox timeToolStripTextBox;
+        private ToolStripLabel toolStripLabel5;
+        private ToolStripTextBox oilToolStripTextBox;
+        private ToolStripLabel toolStripLabel6;
+        private ToolStripTextBox rockToolStripTextBox;
     }
 }
