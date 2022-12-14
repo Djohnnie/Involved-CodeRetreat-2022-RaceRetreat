@@ -9,6 +9,7 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using RaceRetreat.Contracts;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.Drawing;
+using RaceRetreat.Blazor.Runners;
 
 namespace RaceRetreat.Blazor.Helpers;
 
@@ -18,13 +19,16 @@ public class LevelBuilderHelper
 
     private readonly Random _randomGenerator = new();
     private readonly PlaysHelper _playsHelper;
+    private readonly GameRunner _gameRunner;
     private readonly GraphicsCacheHelper _graphicsCacheHelper;
 
     public LevelBuilderHelper(
         PlaysHelper playsHelper,
+        GameRunner gameRunner,
         GraphicsCacheHelper graphicsCacheHelper)
     {
         _playsHelper = playsHelper;
+        _gameRunner = gameRunner;
         _graphicsCacheHelper = graphicsCacheHelper;
     }
 
@@ -98,7 +102,7 @@ public class LevelBuilderHelper
             }
             else
             {
-                GenerateUI(imageContext, map);
+                GenerateUI(imageContext, map, mapName);
                 GeneratePathsForLevel(imageContext, map, plays);
             }
         });
@@ -140,7 +144,7 @@ public class LevelBuilderHelper
         }
     }
 
-    private void GenerateUI(IImageProcessingContext imageContext, RaceMap map)
+    private void GenerateUI(IImageProcessingContext imageContext, RaceMap map, string mapName)
     {
         for (int x = 0; x < map.Width; x++)
         {
@@ -168,42 +172,35 @@ public class LevelBuilderHelper
             });
         }
 
+        var currentActiveMap = _gameRunner.CurrentMapState;
         var font = SystemFonts.Get("Consolas").CreateFont(40, FontStyle.Bold);
-        var textLeft = "Total rounds:";
-        var textRight = "Time per round: 0.1 sec.";
-
-        var offsetX = 50;
-
-        var textLeftBounds = TextMeasurer.MeasureBounds(textLeft, new TextOptions(font));
-        var textRightBounds = TextMeasurer.MeasureBounds(textRight, new TextOptions(font));
-
-        imageContext.DrawText(textLeft, font, Color.Black, new PointF(offsetX + 2, TILE_SIZE / 2f - textLeftBounds.Height / 2f + 2));
-        imageContext.DrawText(textLeft, font, Color.White, new PointF(offsetX, TILE_SIZE / 2f - textLeftBounds.Height / 2f));
-
-        imageContext.DrawText(textRight, font, Color.Black, new PointF(TILE_SIZE * map.Width - offsetX + 2 - textRightBounds.Width, TILE_SIZE / 2f - textRightBounds.Height / 2f + 2));
-        imageContext.DrawText(textRight, font, Color.White, new PointF(TILE_SIZE * map.Width - offsetX - textRightBounds.Width, TILE_SIZE / 2f - textRightBounds.Height / 2f));
-
-        var uiRoundShadowBitmap = _graphicsCacheHelper.GetImageByUIKind(UIKind.UI_11);
-        var uiRoundBitmap = _graphicsCacheHelper.GetImageByUIKind(UIKind.UI_13);
-
-        for (int r = 0; r < 30; r++)
+        
+        if (currentActiveMap != null && currentActiveMap.MapName == mapName)
         {
-            var uiRoundLocation = new Point(
-                (int)textLeftBounds.Width + offsetX * 2 + r * (uiRoundBitmap.Width + 10),
-                TILE_SIZE / 2 - uiRoundBitmap.Height / 2);
+            var textLeft = "Total rounds:";
+            var textRight = $"Time per round: {currentActiveMap.TimePerRound}ms";
 
-            imageContext.DrawImage(uiRoundShadowBitmap, uiRoundLocation, new GraphicsOptions
-            {
-                AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
-                Antialias = false,
-                AntialiasSubpixelDepth = 16,
-                BlendPercentage = 1,
-                ColorBlendingMode = PixelColorBlendingMode.Normal
-            });
+            var offsetX = 50;
 
-            if (r < new Random().Next(10, 20))
+            var textLeftBounds = TextMeasurer.MeasureBounds(textLeft, new TextOptions(font));
+            var textRightBounds = TextMeasurer.MeasureBounds(textRight, new TextOptions(font));
+
+            imageContext.DrawText(textLeft, font, Color.Black, new PointF(offsetX + 2, TILE_SIZE / 2f - textLeftBounds.Height / 2f + 2));
+            imageContext.DrawText(textLeft, font, Color.White, new PointF(offsetX, TILE_SIZE / 2f - textLeftBounds.Height / 2f));
+
+            imageContext.DrawText(textRight, font, Color.Black, new PointF(TILE_SIZE * map.Width - offsetX + 2 - textRightBounds.Width, TILE_SIZE / 2f - textRightBounds.Height / 2f + 2));
+            imageContext.DrawText(textRight, font, Color.White, new PointF(TILE_SIZE * map.Width - offsetX - textRightBounds.Width, TILE_SIZE / 2f - textRightBounds.Height / 2f));
+
+            var uiRoundShadowBitmap = _graphicsCacheHelper.GetImageByUIKind(UIKind.UI_11);
+            var uiRoundBitmap = _graphicsCacheHelper.GetImageByUIKind(UIKind.UI_13);
+
+            for (int r = 1; r <= currentActiveMap.Rounds; r++)
             {
-                imageContext.DrawImage(uiRoundBitmap, uiRoundLocation, new GraphicsOptions
+                var uiRoundLocation = new Point(
+                    (int)textLeftBounds.Width + offsetX * 2 + r * (uiRoundBitmap.Width + 10),
+                    TILE_SIZE / 2 - uiRoundBitmap.Height / 2);
+
+                imageContext.DrawImage(uiRoundShadowBitmap, uiRoundLocation, new GraphicsOptions
                 {
                     AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
                     Antialias = false,
@@ -211,7 +208,30 @@ public class LevelBuilderHelper
                     BlendPercentage = 1,
                     ColorBlendingMode = PixelColorBlendingMode.Normal
                 });
+
+                if (r <= currentActiveMap.CurrentRound)
+                {
+                    imageContext.DrawImage(uiRoundBitmap, uiRoundLocation, new GraphicsOptions
+                    {
+                        AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
+                        Antialias = false,
+                        AntialiasSubpixelDepth = 16,
+                        BlendPercentage = 1,
+                        ColorBlendingMode = PixelColorBlendingMode.Normal
+                    });
+                }
             }
+        }
+        else
+        {
+            var text = "This map is not in active play right now!";
+
+            var offsetX = 50;
+
+            var textBounds = TextMeasurer.MeasureBounds(text, new TextOptions(font));
+
+            imageContext.DrawText(text, font, Color.Black, new PointF(offsetX + 2, TILE_SIZE / 2f - textBounds.Height / 2f + 2));
+            imageContext.DrawText(text, font, Color.White, new PointF(offsetX, TILE_SIZE / 2f - textBounds.Height / 2f));
         }
     }
 
