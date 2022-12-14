@@ -1,9 +1,9 @@
 ﻿namespace RaceRetreat.Contracts;
 
-public class GameState
+public class MapState
 {
     public string MapName { get; set; }
-    public string PlayerName { get; set; }
     public int Rounds { get; set; }
+    public int TimePerRound { get; set; }
     public int CurrentRound { get; set; }
 }

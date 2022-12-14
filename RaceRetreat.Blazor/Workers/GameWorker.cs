@@ -15,6 +15,7 @@ public class GameWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
+            // The gamerunner will tick and make sure the correct turns and speed is applied.
             await _gameRunner.Tick();
         }
     }

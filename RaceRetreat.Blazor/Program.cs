@@ -21,7 +21,7 @@ builder.Services.AddSingleton<GameHelper>();
 builder.Services.AddSingleton<LevelBuilderHelper>();
 builder.Services.AddSingleton<GraphicsCacheHelper>();
 builder.Services.AddSingleton<GameRunner>();
-builder.Services.AddTransient<MapRunner>();
+//builder.Services.AddTransient<MapRunner>();
 builder.Services.AddSingleton<GameHub>();
 
 builder.Services.AddHostedService<GameWorker>();

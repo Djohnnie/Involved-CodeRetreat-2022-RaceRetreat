@@ -24,7 +24,7 @@ _connection.Closed += async (error) =>
 
 _connection.On<GameState>("ReceiveGameState", gameState =>
 {
-    Console.WriteLine($"{gameState.PlayerName} | {gameState.MapName} | {gameState.Round}");
+    Console.WriteLine($"{gameState.PlayerName} | {gameState.MapName} | {gameState.CurrentRound}/{gameState.Rounds}");
 });
 
 await _connection.StartAsync();
