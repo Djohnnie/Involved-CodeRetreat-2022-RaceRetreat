@@ -5,15 +5,26 @@ namespace RaceRetreat.Blazor.Runners;
 
 public class MapRunner
 {
-    private RaceMap _map;
-    private string _mapName;
+    private readonly RaceMap _map;
+    private readonly string _mapName;
+    private readonly List<Player> _players;
 
     private int _currentRound = 0;
 
-    public MapRunner(RaceMap map, string mapName)
+    public MapRunner(RaceMap map, string mapName, List<Player> players)
     {
         _map = map;
         _mapName = mapName;
+        _players = players;
+    }
+
+    public void SetupMap()
+    {
+        var startTile = _map.Tiles.FirstOrDefault(x => x.IsStart);
+        if (startTile == null)
+            throw new ArgumentNullException($"No Start Tile!");
+
+        startTile.Players = _players.ToList();
     }
 
     public MapState Tick(List<IRaceAction> tickActions)
@@ -37,6 +48,12 @@ public class MapRunner
             TimePerRound = _map.TimePerRound,
             CurrentRound = _currentRound
         };
+    }
+
+    public bool IsPlayerOiled(string playerName)
+    {
+        var player = _map.FetchPlayer(playerName);
+        return player.OilTicksRemaining > 0;
     }
 
     /// <summary>

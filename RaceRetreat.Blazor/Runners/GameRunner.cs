@@ -7,6 +7,7 @@ namespace RaceRetreat.Blazor.Runners;
 public class GameRunner
 {
     private readonly LevelsHelper _levelsHelper;
+    private readonly PlaysHelper _playsHelper;
     private readonly ILogger<GameRunner> _logger;
 
     private CurrentMap _currentMap = CurrentMap.Map0;
@@ -19,9 +20,11 @@ public class GameRunner
 
     public GameRunner(
         LevelsHelper levelsHelper,
+        PlaysHelper playsHelper,
         ILogger<GameRunner> logger)
     {
         _levelsHelper = levelsHelper;
+        _playsHelper = playsHelper;
         _logger = logger;
         PlayerActions = new List<IRaceAction>();
     }
@@ -74,8 +77,10 @@ public class GameRunner
                 break;
         }
 
+        List<Player> players = await _playsHelper.GetPlayers();
         var map = await _levelsHelper.GetMapByName(mapName);
-        _activeMapRunner = new MapRunner(map.Map, map.MapName);
+        _activeMapRunner = new MapRunner(map.Map, map.MapName, players);
+        _activeMapRunner.SetupMap();
     }
 
     public async Task AddAction(IRaceAction action)
@@ -99,9 +104,12 @@ public class GameRunner
             playerActionsDict[playerAction.PlayerName].Add(playerAction);
         }
 
-        foreach (var playerActions in playerActionsDict.Select(playerAction => playerAction.Value))
+        foreach (var playerActions in playerActionsDict)
         {
-            newList.AddRange(playerActions.TakeLast(2));
+            var playerActionValues = playerActions.Value;
+            var isOiled = _activeMapRunner.IsPlayerOiled(playerActions.Key);
+
+            newList.AddRange(isOiled ? playerActionValues.TakeLast(1) : playerActionValues.TakeLast(2));
         }
 
         return newList;

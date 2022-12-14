@@ -1,4 +1,5 @@
 ﻿using RaceRetreat.Contracts;
+using RaceRetreat.Domain;
 
 namespace RaceRetreat.Blazor.Helpers;
 

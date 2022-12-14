@@ -69,4 +69,22 @@ public class RaceMap
             }
         }
     }
+
+    public RaceTile LocatePlayer(string playerName)
+    {
+        var playerLocation = Tiles.FirstOrDefault(x => x.Players.Select(x => x.PlayerName).Contains(playerName));
+        if (playerLocation == null)
+            throw new ArgumentNullException($"Could not locate player");
+
+        return playerLocation;
+    }
+
+    public Player FetchPlayer(string playerName)
+    {
+        var player = Tiles.SelectMany(x => x.Players).FirstOrDefault(x => x.PlayerName == playerName);
+        if (player == null)
+            throw new ArgumentNullException($"Could not locate player");
+
+        return player;
+    }
 }
