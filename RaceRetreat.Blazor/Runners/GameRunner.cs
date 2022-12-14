@@ -1,35 +1,33 @@
 ﻿using RaceRetreat.Blazor.Helpers;
-using RaceRetreat.Blazor.Hubs;
 using RaceRetreat.Contracts;
-using System.Diagnostics;
+using RaceRetreat.Domain;
 
 namespace RaceRetreat.Blazor.Runners;
 
 public class GameRunner
 {
-    private readonly GameHub _gameHub;
     private readonly LevelsHelper _levelsHelper;
     private readonly ILogger<GameRunner> _logger;
 
     private CurrentMap _currentMap = CurrentMap.Map0;
     private MapRunner? _activeMapRunner = null;
     private MapState? _lastMapState = null;
+    private List<IRaceAction> PlayerActions { get; set; }
 
     public MapState? CurrentMapState => _lastMapState;
 
+
     public GameRunner(
-        GameHub gameHub,
         LevelsHelper levelsHelper,
         ILogger<GameRunner> logger)
     {
-        _gameHub = gameHub;
         _levelsHelper = levelsHelper;
         _logger = logger;
+        PlayerActions = new List<IRaceAction>();
     }
 
-    public async Task Tick()
+    public async Task<MapState?> Tick()
     {
-        var sw = Stopwatch.StartNew();
 
         // If no map is active, just wait for a new map to be set.
         if (_activeMapRunner == null)
@@ -37,25 +35,19 @@ public class GameRunner
             _logger.LogInformation("No map is active! Waiting for 1000ms...");
 
             await Task.Delay(1000);
-            return;
+            return null;
         }
 
+        var tickActions = await CalculateActionsToProcess();
         // Make the active map tick.
-        _lastMapState = _activeMapRunner.Tick();
+        _lastMapState =  _activeMapRunner.Tick(tickActions);
 
-        // Send the new gamestate to the SignalR hub.
-        await _gameHub.SendGameState(new GameState
-        {
-            MapName = _lastMapState.MapName,
-            Rounds = _lastMapState.Rounds,
-            CurrentRound = _lastMapState.CurrentRound
-        });
+        //Clear PlayerActions
+        PlayerActions.Clear();
 
         _logger.LogInformation($"Running map '{_lastMapState.MapName}', round {_lastMapState.CurrentRound}/{_lastMapState.Rounds}");
 
-        // Calculate remaining time to sleep.
-        var delay = _lastMapState.TimePerRound - (int)sw.ElapsedMilliseconds;
-        await Task.Delay(delay < 0 ? 0 : delay);
+        return _lastMapState;
     }
 
     public async Task SetActiveMap(string mapName)
@@ -85,4 +77,34 @@ public class GameRunner
         var map = await _levelsHelper.GetMapByName(mapName);
         _activeMapRunner = new MapRunner(map.Map, map.MapName);
     }
+
+    public async Task AddAction(IRaceAction action)
+    {
+        PlayerActions.Add(action);
+
+        //Just so resharper will shut up (=
+        await Task.CompletedTask;
+    }
+
+    private async Task<List<IRaceAction>> CalculateActionsToProcess()
+    {
+        var newList = new List<IRaceAction>();
+        var playerActionsDict = new Dictionary<string, List<IRaceAction>>();
+
+        foreach (var playerAction in PlayerActions)
+        {
+            if(!playerActionsDict.ContainsKey(playerAction.PlayerName))
+                playerActionsDict.Add(playerAction.PlayerName, new List<IRaceAction>());
+
+            playerActionsDict[playerAction.PlayerName].Add(playerAction);
+        }
+
+        foreach (var playerActions in playerActionsDict.Select(playerAction => playerAction.Value))
+        {
+            newList.AddRange(playerActions.TakeLast(2));
+        }
+
+        return newList;
+    }
+
 }

@@ -16,7 +16,7 @@ public class MapRunner
         _mapName = mapName;
     }
 
-    public MapState Tick()
+    public MapState Tick(List<IRaceAction> tickActions)
     {
         _currentRound++;
 
@@ -24,6 +24,10 @@ public class MapRunner
         {
             // TODO: RESET
             _currentRound = 1;
+        }
+        else
+        {
+            HandleActions(tickActions);
         }
 
         return new MapState
@@ -33,5 +37,28 @@ public class MapRunner
             TimePerRound = _map.TimePerRound,
             CurrentRound = _currentRound
         };
+    }
+
+    /// <summary>
+    /// First attack options because attack disables the other player completely
+    /// Then move/mine actions in the order given to allow a player to mine and move through the tile in one tick
+    /// Last place actions, these only cound in the next tick
+    /// </summary>
+    /// <param name="tickActions"></param>
+    private void HandleActions(List<IRaceAction> tickActions)
+    {
+        //firstAttackActions
+        var attackActions = tickActions.Where(x => x.GetType() == typeof(AttackPlayerAction)).ToList();
+        attackActions.ForEach(x => x.ExecuteAction(_map));
+
+        //ThenMoveMineActions
+        var moveMineActions = tickActions
+            .Where(x => x.GetType() == typeof(MoveAction) || x.GetType() == typeof(MineRockAction)).ToList();
+        moveMineActions.ForEach(x => x.ExecuteAction(_map));
+
+        //ThenOilRockActions
+        var oilRockActions = tickActions
+            .Where(x => x.GetType() == typeof(PlaceOilAction) || x.GetType() == typeof(PlaceRockAction)).ToList();
+        oilRockActions.ForEach(x => x.ExecuteAction(_map));
     }
 }
