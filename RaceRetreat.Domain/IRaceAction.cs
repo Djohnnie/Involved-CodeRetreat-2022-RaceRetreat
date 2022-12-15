@@ -6,6 +6,7 @@ public interface IRaceAction
     string PlayerName { get; set; }
     void ExecuteAction(RaceMap map);
 }
+
 public class MoveAction : IRaceAction
 {
     public Direction Direction { get; set; }
@@ -167,7 +168,7 @@ public class AttackPlayerAction : IRaceAction
 public enum Direction
 {
     North = 0,
-    South = 1,
-    East = 2,
+    East = 1,
+    South = 2,
     West = 3
 }

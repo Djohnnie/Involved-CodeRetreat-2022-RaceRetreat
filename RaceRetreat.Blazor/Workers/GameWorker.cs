@@ -10,8 +10,7 @@ public class GameWorker : BackgroundService
     private readonly GameRunner _gameRunner;
     private readonly GameHub _gameHub;
 
-    public GameWorker(GameRunner gameRunner,
-        GameHub gameHub)
+    public GameWorker(GameRunner gameRunner, GameHub gameHub)
     {
         _gameRunner = gameRunner;
         _gameHub = gameHub;
@@ -22,18 +21,22 @@ public class GameWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var sw = new Stopwatch();
+
             // The gamerunner will tick and make sure the correct turns and speed is applied.
             var lastMapState = await _gameRunner.Tick();
 
-            if(lastMapState == null) 
+            if (lastMapState == null)
+            {
                 continue;
+            }
 
             // Send the new gamestate to the SignalR hub.
             await _gameHub.SendGameState(new GameState
             {
                 MapName = lastMapState.MapName,
                 Rounds = lastMapState.Rounds,
-                CurrentRound = lastMapState.CurrentRound
+                CurrentRound = lastMapState.CurrentRound,
+                Map = lastMapState.Map,
             });
 
             // Calculate remaining time to sleep.

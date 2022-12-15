@@ -1,4 +1,6 @@
-﻿namespace RaceRetreat.Contracts;
+﻿using RaceRetreat.Domain;
+
+namespace RaceRetreat.Contracts;
 
 public class GameState
 {
@@ -6,4 +8,6 @@ public class GameState
     public string PlayerName { get; set; }
     public int Rounds { get; set; }
     public int CurrentRound { get; set; }
+
+    public RaceMap Map { get; set; }
 }

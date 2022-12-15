@@ -10,10 +10,9 @@ public class GameRunner
     private readonly PlaysHelper _playsHelper;
     private readonly ILogger<GameRunner> _logger;
 
-    private CurrentMap _currentMap = CurrentMap.Map0;
     private MapRunner? _activeMapRunner = null;
     private MapState? _lastMapState = null;
-    private List<IRaceAction> PlayerActions { get; set; }
+    private List<IRaceAction> PlayerActions => new();
 
     public MapState? CurrentMapState => _lastMapState;
 
@@ -26,12 +25,10 @@ public class GameRunner
         _levelsHelper = levelsHelper;
         _playsHelper = playsHelper;
         _logger = logger;
-        PlayerActions = new List<IRaceAction>();
     }
 
     public async Task<MapState?> Tick()
     {
-
         // If no map is active, just wait for a new map to be set.
         if (_activeMapRunner == null)
         {
@@ -42,10 +39,11 @@ public class GameRunner
         }
 
         var tickActions = await CalculateActionsToProcess();
-        // Make the active map tick.
-        _lastMapState =  _activeMapRunner.Tick(tickActions);
 
-        //Clear PlayerActions
+        // Make the active map tick.
+        _lastMapState = _activeMapRunner.Tick(tickActions);
+
+        // Clear PlayerActions
         PlayerActions.Clear();
 
         _logger.LogInformation($"Running map '{_lastMapState.MapName}', round {_lastMapState.CurrentRound}/{_lastMapState.Rounds}");
@@ -55,40 +53,17 @@ public class GameRunner
 
     public async Task SetActiveMap(string mapName)
     {
-        switch (mapName)
-        {
-            case "map-1":
-                _currentMap = CurrentMap.Map1;
-                break;
-            case "map-2":
-                _currentMap = CurrentMap.Map2;
-                break;
-            case "map-3":
-                _currentMap = CurrentMap.Map3;
-                break;
-            case "map-4":
-                _currentMap = CurrentMap.Map4;
-                break;
-            case "map-5":
-                _currentMap = CurrentMap.Map5;
-                break;
-            default:
-                _currentMap = CurrentMap.Map0;
-                break;
-        }
-
         List<Player> players = await _playsHelper.GetPlayers();
         var map = await _levelsHelper.GetMapByName(mapName);
         _activeMapRunner = new MapRunner(map.Map, map.MapName, players);
         _activeMapRunner.SetupMap();
     }
 
-    public async Task AddAction(IRaceAction action)
+    public Task AddAction(IRaceAction action)
     {
         PlayerActions.Add(action);
 
-        //Just so resharper will shut up (=
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     private async Task<List<IRaceAction>> CalculateActionsToProcess()
@@ -98,7 +73,7 @@ public class GameRunner
 
         foreach (var playerAction in PlayerActions)
         {
-            if(!playerActionsDict.ContainsKey(playerAction.PlayerName))
+            if (!playerActionsDict.ContainsKey(playerAction.PlayerName))
                 playerActionsDict.Add(playerAction.PlayerName, new List<IRaceAction>());
 
             playerActionsDict[playerAction.PlayerName].Add(playerAction);

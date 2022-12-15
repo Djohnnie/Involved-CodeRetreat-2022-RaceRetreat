@@ -1,6 +1,6 @@
 ﻿namespace RaceRetreat.Domain;
 
-public class Player
+public record Player
 {
     public int Index { get; set; }
     public string PlayerName { get; set; }

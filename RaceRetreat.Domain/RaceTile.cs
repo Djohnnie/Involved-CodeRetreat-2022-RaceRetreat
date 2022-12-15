@@ -10,7 +10,7 @@ public class RaceTile
 
     public List<Player> Players { get; set; }
 
-    public bool IsStart => Kind == TileKind.R1_03 | Kind == TileKind.R2_03 || Kind == TileKind.R3_03;
+    public bool IsStart => Kind == TileKind.R1_11 || Kind == TileKind.R1_12 || Kind == TileKind.R1_13 || Kind == TileKind.R1_14 || Kind == TileKind.R1_15 || Kind == TileKind.R1_16 || Kind == TileKind.R1_17 || Kind == TileKind.R1_18;
 
     public bool IsDrivable => Kind != TileKind.R1_00 && Kind != TileKind.R2_00 && Kind != TileKind.R3_00;
 

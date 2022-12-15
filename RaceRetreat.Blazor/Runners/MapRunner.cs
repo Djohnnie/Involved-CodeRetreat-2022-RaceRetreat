@@ -8,6 +8,7 @@ public class MapRunner
     private readonly RaceMap _map;
     private readonly string _mapName;
     private readonly List<Player> _players;
+    private List<Play> _plays;
 
     private int _currentRound = 0;
 
@@ -21,10 +22,32 @@ public class MapRunner
     public void SetupMap()
     {
         var startTile = _map.Tiles.FirstOrDefault(x => x.IsStart);
+
         if (startTile == null)
+        {
             throw new ArgumentNullException($"No Start Tile!");
+        }
 
         startTile.Players = _players.ToList();
+
+        _plays = new List<Play>();
+
+        foreach (var player in _players)
+        {
+            _plays.Add(new Play
+            {
+                PlayerName = player.PlayerName,
+                Index = player.Index,
+                Steps = new List<Step>
+                {
+                    new Step
+                    {
+                        X = startTile.X,
+                        Y = startTile.Y,
+                    }
+                }
+            });
+        }
     }
 
     public MapState Tick(List<IRaceAction> tickActions)
@@ -39,6 +62,18 @@ public class MapRunner
         else
         {
             HandleActions(tickActions);
+
+            foreach (var tile in _map.Tiles)
+            {
+                foreach (var player in tile.Players)
+                {
+                    _plays.Single(x => x.Index == player.Index).Steps.Add(new Step
+                    {
+                        X = tile.X,
+                        Y = tile.Y,
+                    });
+                }
+            }
         }
 
         return new MapState
@@ -46,7 +81,10 @@ public class MapRunner
             MapName = _mapName,
             Rounds = _map.Rounds,
             TimePerRound = _map.TimePerRound,
-            CurrentRound = _currentRound
+            CurrentRound = _currentRound,
+            Players = _players,
+            Plays = _plays,
+            Map = _map
         };
     }
 

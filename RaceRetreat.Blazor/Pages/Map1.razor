@@ -1,8 +1,10 @@
 ﻿@using RaceRetreat.Blazor.Helpers
+@using RaceRetreat.Blazor.Runners;
 @using RaceRetreat.Contracts
 
 @page "/map1"
 @inject PlaysHelper _playsHelper
+@inject GameRunner _gameRunner
 @inject NavigationManager _navigationManager
 
 <h1>"map-1" - Introductie</h1>
@@ -32,12 +34,12 @@ else
 
 @code
 {
-    private GetPlayersResponse _getPlayersResponse;
+    private GetPlayersResponse? _getPlayersResponse;
     private Guid _imageRefresh = Guid.NewGuid();
 
-    protected async void RunTimer()
+    protected async void RunTimer(int interval)
     {
-        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+        using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(interval));
 
         while (await timer.WaitForNextTickAsync())
         {
@@ -48,8 +50,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _getPlayersResponse = await _playsHelper.GetPlayersByLevel("map-1");
+        _getPlayersResponse = await _playsHelper.GetPlayers();
 
-        RunTimer();
+        var interval = _gameRunner.CurrentMapState?.MapName == "map-1" ? _gameRunner.CurrentMapState.TimePerRound : 1000;
+
+        RunTimer(interval);
     }
 }

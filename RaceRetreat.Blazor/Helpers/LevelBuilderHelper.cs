@@ -18,16 +18,13 @@ public class LevelBuilderHelper
     private const int TILE_SIZE = 128;
 
     private readonly Random _randomGenerator = new();
-    private readonly PlaysHelper _playsHelper;
     private readonly GameRunner _gameRunner;
     private readonly GraphicsCacheHelper _graphicsCacheHelper;
 
     public LevelBuilderHelper(
-        PlaysHelper playsHelper,
         GameRunner gameRunner,
         GraphicsCacheHelper graphicsCacheHelper)
     {
-        _playsHelper = playsHelper;
         _gameRunner = gameRunner;
         _graphicsCacheHelper = graphicsCacheHelper;
     }
@@ -39,7 +36,6 @@ public class LevelBuilderHelper
         var mapResourceName = BuildMapResourceName(mapName);
         var mapJson = EmbeddedResourceHelper.GetMapByResourceName(mapResourceName);
         var map = JsonSerializer.Deserialize<RaceMap>(mapJson);
-        var plays = await _playsHelper.GetLastPlaysByLevel(mapName);
 
         var (width, height) = (map.Width * TILE_SIZE, map.Height * TILE_SIZE);
 
@@ -103,7 +99,7 @@ public class LevelBuilderHelper
             else
             {
                 GenerateUI(imageContext, map, mapName);
-                GeneratePathsForLevel(imageContext, map, plays);
+                GeneratePathsForLevel(imageContext, map, mapName);
             }
         });
 
@@ -174,7 +170,7 @@ public class LevelBuilderHelper
 
         var currentActiveMap = _gameRunner.CurrentMapState;
         var font = SystemFonts.Get("Consolas").CreateFont(40, FontStyle.Bold);
-        
+
         if (currentActiveMap != null && currentActiveMap.MapName == mapName)
         {
             var textLeft = "Total rounds:";
@@ -235,80 +231,32 @@ public class LevelBuilderHelper
         }
     }
 
-    private void GeneratePathsForLevel(IImageProcessingContext imageContext, RaceMap map, GetLastPlaysByLevelResponse plays)
+    private void GeneratePathsForLevel(IImageProcessingContext imageContext, RaceMap map, string mapName)
     {
-        foreach (var play in plays)
+        var currentActiveMap = _gameRunner.CurrentMapState;
+        if (currentActiveMap != null && currentActiveMap.MapName == mapName)
         {
-            var color = GenerateColorByIndex(play.Index);
-            var actualPoints = new List<PointF>();
-            var start = map.Tiles.Single(x => x.Kind == TileKind.R1_00);
-            var lastPoint = new Point(start.X, start.Y);
+            if (currentActiveMap.Plays != null)
+            {
+                foreach (var play in currentActiveMap.Plays)
+                {
+                    var color = GenerateColorByIndex(play.Index);
+                    var actualPoints = new List<PointF>();
 
-            var tileLocation = CalculateBounds(lastPoint.X, lastPoint.Y);
-            var offsetX = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
-            var offsetY = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
-            actualPoints.Add(new PointF(tileLocation.X + offsetX, tileLocation.Y + offsetY));
+                    foreach (var step in play.Steps)
+                    {
+                        var lastPoint = new Point(step.X, step.Y);
 
-            //foreach (var step in play.SubmittedSolution.Steps)
-            //{
-            //    switch (step)
-            //    {
-            //        case SolutionStep.NorthEast:
-            //            if (lastPoint.Y % 2 == 0)
-            //            {
-            //                lastPoint = new Point(lastPoint.X, lastPoint.Y - 1);
-            //            }
-            //            else
-            //            {
-            //                lastPoint = new Point(lastPoint.X + 1, lastPoint.Y - 1);
-            //            }
-            //            break;
-            //        case SolutionStep.East:
-            //            lastPoint = new Point(lastPoint.X + 1, lastPoint.Y);
-            //            break;
-            //        case SolutionStep.SouthEast:
-            //            if (lastPoint.Y % 2 == 0)
-            //            {
-            //                lastPoint = new Point(lastPoint.X, lastPoint.Y + 1);
-            //            }
-            //            else
-            //            {
-            //                lastPoint = new Point(lastPoint.X + 1, lastPoint.Y + 1);
-            //            }
-            //            break;
-            //        case SolutionStep.SouthWest:
-            //            if (lastPoint.Y % 2 == 0)
-            //            {
-            //                lastPoint = new Point(lastPoint.X - 1, lastPoint.Y + 1);
-            //            }
-            //            else
-            //            {
-            //                lastPoint = new Point(lastPoint.X, lastPoint.Y + 1);
-            //            }
-            //            break;
-            //        case SolutionStep.West:
-            //            lastPoint = new Point(lastPoint.X - 1, lastPoint.Y);
-            //            break;
-            //        case SolutionStep.NorthWest:
-            //            if (lastPoint.Y % 2 == 0)
-            //            {
-            //                lastPoint = new Point(lastPoint.X - 1, lastPoint.Y - 1);
-            //            }
-            //            else
-            //            {
-            //                lastPoint = new Point(lastPoint.X, lastPoint.Y - 1);
-            //            }
-            //            break;
-            //    }
+                        var tileLocation = CalculateBounds(lastPoint.X, lastPoint.Y);
+                        var offsetX = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
+                        var offsetY = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
+                        actualPoints.Add(new PointF(tileLocation.X + offsetX, tileLocation.Y + offsetY));
+                    }
 
-            //    tileLocation = CalculateBounds(lastPoint.X, lastPoint.Y);
-            //    offsetX = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
-            //    offsetY = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
-            //    actualPoints.Add(new PointF(tileLocation.X + offsetX, tileLocation.Y + offsetY));
-            //}
-
-            imageContext.DrawLines(Color.White, 6f, actualPoints.ToArray());
-            imageContext.DrawLines(color, 2f, actualPoints.ToArray());
+                    imageContext.DrawLines(Color.White, 6f, actualPoints.ToArray());
+                    imageContext.DrawLines(color, 2f, actualPoints.ToArray());
+                }
+            }
         }
     }
 

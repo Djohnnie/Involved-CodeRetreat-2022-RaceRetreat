@@ -10,22 +10,27 @@ public class GameHub : Hub
 {
     private readonly AzureTableHelper _azureTableHelper;
     private readonly GameRunner _gameRunner;
-    private readonly Dictionary<string, string> _connectionIdPlayerDict;
+
+    private readonly Dictionary<string, string> _connectedPlayerCache = new();
 
     public GameHub(AzureTableHelper azureTableHelper, GameRunner gameRunner)
     {
         _azureTableHelper = azureTableHelper;
         _gameRunner = gameRunner;
-        _connectionIdPlayerDict = new Dictionary<string, string>();
     }
 
     public async Task Login(string playerName)
     {
         await _azureTableHelper.AddPlayer(playerName);
-        if(!_connectionIdPlayerDict.ContainsKey(Context.ConnectionId))
-            _connectionIdPlayerDict.Add(Context.ConnectionId, playerName);
+
+        if (!_connectedPlayerCache.ContainsKey(Context.ConnectionId))
+        {
+            _connectedPlayerCache.Add(Context.ConnectionId, playerName);
+        }
         else
-            _connectionIdPlayerDict[Context.ConnectionId] = playerName;
+        {
+            _connectedPlayerCache[Context.ConnectionId] = playerName;
+        }
     }
 
     public async Task ExecuteMoveAction(Direction direction)
@@ -83,16 +88,22 @@ public class GameHub : Hub
         }
     }
 
-    public override async Task OnDisconnectedAsync(Exception ex)
+    public override Task OnDisconnectedAsync(Exception ex)
     {
-        if(_connectionIdPlayerDict.ContainsKey(Context.ConnectionId))
-            _connectionIdPlayerDict.Remove(Context.ConnectionId);
+        if (_connectedPlayerCache.ContainsKey(Context.ConnectionId))
+        {
+            _connectedPlayerCache.Remove(Context.ConnectionId);
+        }
+
+        return Task.CompletedTask;
     }
 
     private string TryGetPlayerName()
     {
-        if (_connectionIdPlayerDict.ContainsKey(Context.ConnectionId))
-            return _connectionIdPlayerDict[Context.ConnectionId];
+        if (_connectedPlayerCache.ContainsKey(Context.ConnectionId))
+        {
+            return _connectedPlayerCache[Context.ConnectionId];
+        }
 
         throw new HubException("NotLoggedIn");
     }
