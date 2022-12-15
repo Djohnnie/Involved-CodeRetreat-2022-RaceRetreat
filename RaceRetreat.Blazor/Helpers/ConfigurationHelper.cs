@@ -17,7 +17,7 @@ public class ConfigurationHelper
     {
         return new Configuration
         {
-            PointsPerSuccessfulMove = await _azureTableHelper.GetConfiguration("PointsPerSuccessfulMove")
+            PointsPerSuccessfulMove = Convert.ToInt32(await _azureTableHelper.GetConfiguration("PointsPerSuccessfulMove"))
         };
     }
 }

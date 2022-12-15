@@ -61,5 +61,5 @@ public class ConfigurationEntity : ITableEntity
     public string RowKey { get; set; }
     public DateTimeOffset? Timestamp { get; set; }
     public ETag ETag { get; set; }
-    public int Value { get; set; }
+    public string Value { get; set; }
 }
