@@ -30,9 +30,9 @@ _connection.On<GameState>("ReceiveGameState", async gameState =>
 
     Direction? direction = gameState.CurrentRound switch
     {
-        >= 0 and <= 8 => Direction.East,
-        >= 9 and <= 12 => Direction.South,
-        >= 13 and <= 19 => Direction.East,
+        >= 0 and <= 7 => Direction.East,
+        >= 8 and <= 11 => Direction.South,
+        >= 12 and <= 18 => Direction.East,
         _ => null
     };
 

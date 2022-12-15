@@ -17,7 +17,8 @@ public class ConfigurationHelper
     {
         return new Configuration
         {
-            PointsPerSuccessfulMove = await _azureTableHelper.GetConfiguration("PointsPerSuccessfulMove")
+            PointsPerSuccessfulMove = await _azureTableHelper.GetConfiguration("PointsPerSuccessfulMove"),
+            DefaultPoints = await _azureTableHelper.GetConfiguration("DefaultPoints"),
         };
     }
 }
