@@ -50,5 +50,10 @@ public class MoveAction : IRaceAction
             if (newLocation.HasOil)
                 player.OilTicksRemaining = 4;
         }
+
+        if (newLocation.IsEnd)
+        {
+            player.Points -= configuration.DefaultPoints;
+        }
     }
 }
