@@ -169,7 +169,7 @@ public class LevelBuilderHelper
         }
 
         var currentActiveMap = _gameRunner.CurrentMapState;
-        var font = SystemFonts.Get("Consolas").CreateFont(40, FontStyle.Bold);
+        var font = SystemFonts.Get("Lucida Console").CreateFont(40, FontStyle.Bold);
 
         if (currentActiveMap != null && currentActiveMap.MapName == mapName)
         {
