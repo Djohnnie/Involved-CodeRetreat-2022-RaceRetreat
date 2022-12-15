@@ -28,6 +28,8 @@ public class MapRunner
             throw new ArgumentNullException($"No Start Tile!");
         }
 
+        _map.Tiles.ForEach(x => x.Players.Clear());
+
         startTile.Players = _players.ToList();
 
         _plays = new List<Play>();
@@ -56,8 +58,9 @@ public class MapRunner
 
         if (_currentRound > _map.Rounds)
         {
-            // TODO: RESET
-            _currentRound = 1;
+            SetupMap();
+
+            _currentRound = 0;
         }
         else
         {

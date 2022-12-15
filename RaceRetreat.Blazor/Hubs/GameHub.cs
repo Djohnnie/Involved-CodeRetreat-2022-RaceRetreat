@@ -21,8 +21,6 @@ public class GameHub : Hub
 
     public async Task Login(string playerName)
     {
-        await _azureTableHelper.AddPlayer(playerName);
-
         if (!_connectedPlayerCache.ContainsKey(Context.ConnectionId))
         {
             _connectedPlayerCache.Add(Context.ConnectionId, playerName);
@@ -31,6 +29,8 @@ public class GameHub : Hub
         {
             _connectedPlayerCache[Context.ConnectionId] = playerName;
         }
+        
+        await _azureTableHelper.AddPlayer(playerName);
     }
 
     public async Task ExecuteMoveAction(Direction direction)

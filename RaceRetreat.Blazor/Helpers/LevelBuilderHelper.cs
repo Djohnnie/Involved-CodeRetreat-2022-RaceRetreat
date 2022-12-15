@@ -248,13 +248,16 @@ public class LevelBuilderHelper
                         var lastPoint = new Point(step.X, step.Y);
 
                         var tileLocation = CalculateBounds(lastPoint.X, lastPoint.Y);
-                        var offsetX = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
-                        var offsetY = _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
-                        actualPoints.Add(new PointF(tileLocation.X + offsetX, tileLocation.Y + offsetY));
+                        step.OffsetX = step.OffsetX ?? _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
+                        step.OffsetY = step.OffsetY ?? _randomGenerator.Next(TILE_SIZE / 6, TILE_SIZE - TILE_SIZE / 6);
+                        actualPoints.Add(new PointF(tileLocation.X + step.OffsetX.Value, tileLocation.Y + step.OffsetY.Value));
                     }
 
-                    imageContext.DrawLines(Color.White, 6f, actualPoints.ToArray());
-                    imageContext.DrawLines(color, 2f, actualPoints.ToArray());
+                    if (actualPoints.Count > 1)
+                    {
+                        imageContext.DrawLines(Color.White, 6f, actualPoints.ToArray());
+                        imageContext.DrawLines(color, 2f, actualPoints.ToArray());
+                    }
                 }
             }
         }

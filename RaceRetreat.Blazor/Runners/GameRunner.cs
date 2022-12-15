@@ -12,7 +12,7 @@ public class GameRunner
 
     private MapRunner? _activeMapRunner = null;
     private MapState? _lastMapState = null;
-    private List<IRaceAction> PlayerActions => new();
+    private List<IRaceAction> PlayerActions = new();
 
     public MapState? CurrentMapState => _lastMapState;
 

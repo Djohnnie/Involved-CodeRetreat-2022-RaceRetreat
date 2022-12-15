@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using RaceRetreat.Contracts;
+using RaceRetreat.Domain;
 
 Console.WriteLine("RaceRetreat Client");
 Console.WriteLine("------------------");
@@ -26,6 +27,8 @@ _connection.On<GameState>("ReceiveGameState", async gameState =>
 {
 
     Console.WriteLine($"{gameState.PlayerName} | {gameState.MapName} | {gameState.CurrentRound}/{gameState.Rounds}");
+
+    await _connection.SendAsync("ExecuteMoveAction", Direction.East);
 });
 
 await _connection.StartAsync();
