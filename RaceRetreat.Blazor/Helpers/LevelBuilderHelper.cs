@@ -193,10 +193,15 @@ public class LevelBuilderHelper
             var uiRoundShadowBitmap = _graphicsCacheHelper.GetImageByUIKind(UIKind.UI_11);
             var uiRoundBitmap = _graphicsCacheHelper.GetImageByUIKind(UIKind.UI_13);
 
+            var pixelsPerRoundsBitmap = TILE_SIZE * (map.Width - 8) / currentActiveMap.Rounds;
+
+            uiRoundShadowBitmap.Mutate(x => x.Resize((int)(pixelsPerRoundsBitmap / 1.5), 0));
+            uiRoundBitmap.Mutate(x => x.Resize((int)(pixelsPerRoundsBitmap / 1.5), 0));
+
             for (int r = 1; r <= currentActiveMap.Rounds; r++)
             {
                 var uiRoundLocation = new Point(
-                    (int)textLeftBounds.Width + offsetX * 2 + r * (uiRoundBitmap.Width + 10),
+                    (int)textLeftBounds.Width + offsetX * 2 + r * pixelsPerRoundsBitmap,
                     TILE_SIZE / 2 - uiRoundBitmap.Height / 2);
 
                 imageContext.DrawImage(uiRoundShadowBitmap, uiRoundLocation, new GraphicsOptions
