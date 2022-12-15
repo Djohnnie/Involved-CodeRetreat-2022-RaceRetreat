@@ -34,6 +34,7 @@ public class MapRunner
 
         _map.Tiles.ForEach(x => x.Players.Clear());
 
+        _players.ForEach(x => x.Points = 0);
         startTile.Players = _players.ToList();
 
         _plays = new List<Play>();
