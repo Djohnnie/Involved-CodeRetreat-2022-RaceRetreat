@@ -104,7 +104,7 @@ public class LevelBuilderHelper
         });
 
         await using var mapImageStream = new MemoryStream();
-        await mapImage.SaveAsJpegAsync(mapImageStream, new JpegEncoder { Quality = 100 });
+        await mapImage.SaveAsJpegAsync(mapImageStream, new JpegEncoder { Quality = 75 });
         var buffer = mapImageStream.GetBuffer();
 
         sw.Stop();
