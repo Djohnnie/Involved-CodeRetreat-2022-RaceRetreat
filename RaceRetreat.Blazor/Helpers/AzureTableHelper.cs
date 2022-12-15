@@ -43,7 +43,7 @@ public class AzureTableHelper
     public async Task<int> GetConfiguration(string key)
     {
         var result = await _configurationTableClient.GetEntityAsync<ConfigurationEntity>("configuration", key);
-        return result.Value?.Value ?? 0;
+        return Convert.ToInt32(result.Value?.Value ?? "0");
     }
 }
 
