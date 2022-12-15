@@ -1,6 +1,7 @@
 ﻿@using RaceRetreat.Blazor.Helpers
 @using RaceRetreat.Blazor.Runners;
 @using RaceRetreat.Contracts
+@using RaceRetreat.Domain;
 
 @page "/map1"
 @inject PlaysHelper _playsHelper
@@ -11,21 +12,21 @@
 
 <p><a href="_api/maps/map-1" target="_blank">Download map-1 JSON</a></p>
 
-@if (_getPlayersResponse == null)
+@if (_players == null)
 {
     <p><em>Bezig met laden van data...</em></p>
 }
-else if (_getPlayersResponse.Count == 0)
+else if (_players.Count == 0)
 {
     <p><em>Nog geen spelers hebben deze map gereden!</em></p>
 }
 else
 {
     <p>
-        @foreach (var player in _getPlayersResponse)
+        @foreach (var player in _players ?? new List<Player>())
         {
             var cssClass = $"solutionColor{player.Index}";
-            <span class="@cssClass"> [ @player.PlayerName ] </span>
+            <span class="@cssClass"> [ @player.PlayerName - @player.Points points ] </span>
         }
     </p>
 }
@@ -34,7 +35,7 @@ else
 
 @code
 {
-    private GetPlayersResponse? _getPlayersResponse;
+    private List<Player>? _players;
     private Guid _imageRefresh = Guid.NewGuid();
 
     protected async void RunTimer(int interval)
@@ -43,6 +44,7 @@ else
 
         while (await timer.WaitForNextTickAsync())
         {
+            _players = _gameRunner.CurrentMapState?.Players;
             _imageRefresh = Guid.NewGuid();
             StateHasChanged();
         }
@@ -50,8 +52,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _getPlayersResponse = await _playsHelper.GetPlayers();
-
         var interval = _gameRunner.CurrentMapState?.MapName == "map-1" ? _gameRunner.CurrentMapState.TimePerRound : 1000;
 
         RunTimer(interval);

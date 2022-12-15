@@ -6,7 +6,7 @@ Console.WriteLine("RaceRetreat Client");
 Console.WriteLine("------------------");
 Console.WriteLine();
 
-const string HOST = "https://localhost:7292/_signalr/game";
+const string HOST = "https://raceretreat.azurewebsites.net/_signalr/game";
 var random = new Random();
 var closing = false;
 
