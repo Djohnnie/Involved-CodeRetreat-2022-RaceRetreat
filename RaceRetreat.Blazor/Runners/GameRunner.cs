@@ -9,7 +9,7 @@ public class GameRunner
     private readonly LevelsHelper _levelsHelper;
     private readonly PlaysHelper _playsHelper;
     private readonly ILogger<GameRunner> _logger;
-
+    private readonly ConfigurationHelper _configurationHelper;
     private MapRunner? _activeMapRunner = null;
     private MapState? _lastMapState = null;
     private List<IRaceAction> PlayerActions = new();
@@ -20,11 +20,13 @@ public class GameRunner
     public GameRunner(
         LevelsHelper levelsHelper,
         PlaysHelper playsHelper,
-        ILogger<GameRunner> logger)
+        ILogger<GameRunner> logger,
+        ConfigurationHelper configurationHelper)
     {
         _levelsHelper = levelsHelper;
         _playsHelper = playsHelper;
         _logger = logger;
+        _configurationHelper = configurationHelper;
     }
 
     public async Task<MapState?> Tick()
@@ -41,7 +43,7 @@ public class GameRunner
         var tickActions = await CalculateActionsToProcess();
 
         // Make the active map tick.
-        _lastMapState = _activeMapRunner.Tick(tickActions);
+        _lastMapState = await _activeMapRunner.Tick(tickActions);
 
         // Clear PlayerActions
         PlayerActions.Clear();
@@ -55,7 +57,7 @@ public class GameRunner
     {
         List<Player> players = await _playsHelper.GetPlayers();
         var map = await _levelsHelper.GetMapByName(mapName);
-        _activeMapRunner = new MapRunner(map.Map, map.MapName, players);
+        _activeMapRunner = new MapRunner(map.Map, map.MapName, players, _configurationHelper);
         _activeMapRunner.SetupMap();
     }
 

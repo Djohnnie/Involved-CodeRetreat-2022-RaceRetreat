@@ -3,7 +3,7 @@
 public interface IRaceAction
 {
     string PlayerName { get; set; }
-    void ExecuteAction(RaceMap map);
+    void ExecuteAction(RaceMap map, Configuration configuration);
 }
 
 public enum Direction

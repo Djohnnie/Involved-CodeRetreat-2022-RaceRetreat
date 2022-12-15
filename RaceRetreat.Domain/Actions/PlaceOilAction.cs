@@ -6,7 +6,7 @@ public class PlaceOilAction : IRaceAction
     public int Y { get; set; }
     public string PlayerName { get; set; }
 
-    public void ExecuteAction(RaceMap map)
+    public void ExecuteAction(RaceMap map, Configuration configuration)
     {
         var location = map.LocatePlayer(PlayerName);
         var player = location.Players.FirstOrDefault(x => x.PlayerName == PlayerName);

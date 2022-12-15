@@ -5,7 +5,7 @@ public class AttackPlayerAction : IRaceAction
     public string PlayerNameToAttack { get; set; }
     public string PlayerName { get; set; }
 
-    public void ExecuteAction(RaceMap map)
+    public void ExecuteAction(RaceMap map, Configuration configuration)
     {
         var location = map.LocatePlayer(PlayerName);
         var locationPlayerToAttack = map.LocatePlayer(PlayerNameToAttack);

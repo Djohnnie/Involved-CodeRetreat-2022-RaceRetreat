@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped(typeof(ApiHelper<>));
 builder.Services.AddSingleton<LevelsHelper>();
+builder.Services.AddSingleton<ConfigurationHelper>();
 builder.Services.AddSingleton<AzureTableHelper>();
 builder.Services.AddSingleton<PlaysHelper>();
 builder.Services.AddSingleton<GameHelper>();

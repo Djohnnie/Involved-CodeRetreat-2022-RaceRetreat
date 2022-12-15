@@ -404,4 +404,8 @@
     <ProjectReference Include="..\RaceRetreat.Domain\RaceRetreat.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Actions\" />
+  </ItemGroup>
+
 </Project>

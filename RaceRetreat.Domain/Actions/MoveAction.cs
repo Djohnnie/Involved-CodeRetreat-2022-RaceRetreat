@@ -6,7 +6,7 @@ public class MoveAction : IRaceAction
     public string PlayerName { get; set; }
 
 
-    public void ExecuteAction(RaceMap map)
+    public void ExecuteAction(RaceMap map, Configuration configuration)
     {
         var location = map.LocatePlayer(PlayerName);
         var player = location.Players.FirstOrDefault(x => x.PlayerName == PlayerName);
@@ -34,13 +34,15 @@ public class MoveAction : IRaceAction
         }
 
         if (newLocation != null)
-            SetupNewLocation(location, newLocation, player);
+            SetupNewLocation(location, newLocation, player, configuration);
     }
 
-    private void SetupNewLocation(RaceTile oldLocation, RaceTile newLocation, Player player)
+    private void SetupNewLocation(RaceTile oldLocation, RaceTile newLocation, Player player, Configuration configuration)
     {
         if (newLocation.IsDrivable && !newLocation.HasRock)
         {
+            player.Points += configuration.PointsPerSuccessfulMove;
+
             oldLocation.Players.Remove(player);
             newLocation.Players.Add(player);
 

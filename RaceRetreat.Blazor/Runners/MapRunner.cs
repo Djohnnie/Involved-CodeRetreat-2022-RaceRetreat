@@ -1,4 +1,5 @@
-﻿using RaceRetreat.Contracts;
+﻿using RaceRetreat.Blazor.Helpers;
+using RaceRetreat.Contracts;
 using RaceRetreat.Domain;
 using RaceRetreat.Domain.Actions;
 
@@ -9,15 +10,17 @@ public class MapRunner
     private readonly RaceMap _map;
     private readonly string _mapName;
     private readonly List<Player> _players;
+    private readonly ConfigurationHelper _configurationHelper;
     private List<Play> _plays;
 
     private int _currentRound = 0;
 
-    public MapRunner(RaceMap map, string mapName, List<Player> players)
+    public MapRunner(RaceMap map, string mapName, List<Player> players, ConfigurationHelper configurationHelper)
     {
         _map = map;
         _mapName = mapName;
         _players = players;
+        _configurationHelper = configurationHelper;
     }
 
     public void SetupMap()
@@ -53,7 +56,7 @@ public class MapRunner
         }
     }
 
-    public MapState Tick(List<IRaceAction> tickActions)
+    public async Task<MapState> Tick(List<IRaceAction> tickActions)
     {
         _currentRound++;
 
@@ -65,7 +68,8 @@ public class MapRunner
         }
         else
         {
-            HandleActions(tickActions);
+            var configuration = await _configurationHelper.Refresh();
+            HandleActions(tickActions, configuration);
 
             foreach (var tile in _map.Tiles)
             {
@@ -104,20 +108,20 @@ public class MapRunner
     /// Last place actions, these only cound in the next tick
     /// </summary>
     /// <param name="tickActions"></param>
-    private void HandleActions(List<IRaceAction> tickActions)
+    private void HandleActions(List<IRaceAction> tickActions, Configuration configuration)
     {
         //firstAttackActions
         var attackActions = tickActions.Where(x => x.GetType() == typeof(AttackPlayerAction)).ToList();
-        attackActions.ForEach(x => x.ExecuteAction(_map));
+        attackActions.ForEach(x => x.ExecuteAction(_map, configuration));
 
         //ThenMoveMineActions
         var moveMineActions = tickActions
             .Where(x => x.GetType() == typeof(MoveAction) || x.GetType() == typeof(MineRockAction)).ToList();
-        moveMineActions.ForEach(x => x.ExecuteAction(_map));
+        moveMineActions.ForEach(x => x.ExecuteAction(_map, configuration));
 
         //ThenOilRockActions
         var oilRockActions = tickActions
             .Where(x => x.GetType() == typeof(PlaceOilAction) || x.GetType() == typeof(PlaceRockAction)).ToList();
-        oilRockActions.ForEach(x => x.ExecuteAction(_map));
+        oilRockActions.ForEach(x => x.ExecuteAction(_map, configuration));
     }
 }
