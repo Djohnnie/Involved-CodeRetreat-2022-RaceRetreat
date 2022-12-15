@@ -1,0 +1,59 @@
+﻿@using RaceRetreat.Blazor.Helpers
+@using RaceRetreat.Blazor.Runners;
+@using RaceRetreat.Contracts
+@using RaceRetreat.Domain;
+
+@page "/map5"
+@inject PlaysHelper _playsHelper
+@inject GameRunner _gameRunner
+@inject NavigationManager _navigationManager
+
+<h1>"map-1" - Introductie</h1>
+
+<p><a href="_api/maps/map-1" target="_blank">Download map-1 JSON</a></p>
+
+@if (_players == null)
+{
+    <p><em>Bezig met laden van data...</em></p>
+}
+else if (_players.Count == 0)
+{
+    <p><em>Nog geen spelers hebben deze map gereden!</em></p>
+}
+else
+{
+    <p>
+        @foreach (var player in _players ?? new List<Player>())
+        {
+            var cssClass = $"solutionColor{player.Index}";
+            <span class="@cssClass"> [ @player.PlayerName - @player.Points points ] </span>
+        }
+    </p>
+}
+
+<img src=@($"_api/images/map-5?r={_imageRefresh}") style="height: 100%; width: 100%; object-fit: contain" />
+
+@code
+{
+    private List<Player>? _players;
+    private Guid _imageRefresh = Guid.NewGuid();
+
+    protected async void RunTimer(int interval)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(interval));
+
+        while (await timer.WaitForNextTickAsync())
+        {
+            _players = _gameRunner.CurrentMapState?.Players;
+            _imageRefresh = Guid.NewGuid();
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var interval = _gameRunner.CurrentMapState?.MapName == "map-5" ? _gameRunner.CurrentMapState.TimePerRound : 1000;
+
+        RunTimer(interval);
+    }
+}
