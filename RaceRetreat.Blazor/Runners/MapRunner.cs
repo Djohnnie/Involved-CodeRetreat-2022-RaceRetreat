@@ -40,6 +40,8 @@ public class MapRunner
 
         foreach (var player in _players)
         {
+            player.OilRemaining = _map.OilPerPlayer;
+            player.RocksRemaining = _map.RocksPerPlayer;
             _plays.Add(new Play
             {
                 PlayerName = player.PlayerName,

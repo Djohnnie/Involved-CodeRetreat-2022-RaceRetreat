@@ -12,10 +12,12 @@ public class PlaceRockAction : IRaceAction
         var location = map.LocatePlayer(PlayerName);
         var player = location.Players.FirstOrDefault(x => x.PlayerName == PlayerName);
 
-        if (player == null || player.Attacked)
+        if (player == null || player.Attacked || player.RocksRemaining == 0)
             return;
 
         if (map[X, Y].IsDrivable)
             map[X, Y].Overlay = OverlayKind.O_21;
+
+        player.RocksRemaining--;
     }
 }

@@ -7,4 +7,6 @@ public record Player
     public int Points { get; set; }
     public int OilTicksRemaining { get; set; }
     public bool Attacked { get; set; }
+    public int OilRemaining { get; set; }
+    public int RocksRemaining { get; set; }
 }
