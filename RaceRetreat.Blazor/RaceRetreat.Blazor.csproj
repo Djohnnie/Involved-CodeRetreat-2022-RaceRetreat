@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\consola.ttf" />
     <None Remove="Graphics\o-00.png" />
     <None Remove="Graphics\o-01.png" />
     <None Remove="Graphics\o-02.png" />
@@ -197,6 +198,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Fonts\consola.ttf" />
     <EmbeddedResource Include="Graphics\o-00.png" />
     <EmbeddedResource Include="Graphics\o-01.png" />
     <EmbeddedResource Include="Graphics\o-02.png" />

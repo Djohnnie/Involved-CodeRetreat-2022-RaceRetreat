@@ -20,7 +20,7 @@ public class GraphicsCacheHelper
         }
 
         var resourceName = GetResourceNameByTileKind(tileKind);
-        var tileImageStream = EmbeddedResourceHelper.GetGraphicsByResourceName(resourceName);
+        var tileImageStream = EmbeddedResourceHelper.GetByResourceName(resourceName);
         var tileImage = Image.Load(tileImageStream);
         tileImage.Mutate(x => x.Resize(tileSize, tileSize));
         _tileCache.TryAdd(tileKind, tileImage);
@@ -36,7 +36,7 @@ public class GraphicsCacheHelper
         }
 
         var resourceName = GetResourceNameByOverlayKind(overlayKind);
-        var overlayImageStream = EmbeddedResourceHelper.GetGraphicsByResourceName(resourceName);
+        var overlayImageStream = EmbeddedResourceHelper.GetByResourceName(resourceName);
         var overlayImage = Image.Load(overlayImageStream);
         overlayImage.Mutate(x => x.Resize(tileSize, tileSize));
         _overlayCache.TryAdd(overlayKind, overlayImage);
@@ -52,7 +52,7 @@ public class GraphicsCacheHelper
         }
 
         var resourceName = GetResourceNameByUIKind(uiKind);
-        var uiImageStream = EmbeddedResourceHelper.GetGraphicsByResourceName(resourceName);
+        var uiImageStream = EmbeddedResourceHelper.GetByResourceName(resourceName);
         var uiImage = Image.Load(uiImageStream);
         uiImage.Mutate(x => x.Resize(tileSize, tileSize));
         _uiCache.TryAdd(uiKind, uiImage);
@@ -68,7 +68,7 @@ public class GraphicsCacheHelper
         }
 
         var resourceName = GetResourceNameByUIKind(uiKind);
-        var uiImageStream = EmbeddedResourceHelper.GetGraphicsByResourceName(resourceName);
+        var uiImageStream = EmbeddedResourceHelper.GetByResourceName(resourceName);
         var uiImage = Image.Load(uiImageStream);
         _uiCache.TryAdd(uiKind, uiImage);
 

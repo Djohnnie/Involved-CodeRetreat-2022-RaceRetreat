@@ -21,7 +21,7 @@ public static class EmbeddedResourceHelper
         }
     }
 
-    public static Stream GetGraphicsByResourceName(string resourceName)
+    public static Stream GetByResourceName(string resourceName)
     {
         return typeof(EmbeddedResourceHelper).GetTypeInfo()
             .Assembly.GetManifestResourceStream(resourceName);

@@ -169,7 +169,10 @@ public class LevelBuilderHelper
         }
 
         var currentActiveMap = _gameRunner.CurrentMapState;
-        var font = SystemFonts.Get("Lucida Console").CreateFont(40, FontStyle.Bold);
+
+        var collection = new FontCollection();
+        var family = collection.Add(EmbeddedResourceHelper.GetByResourceName("RaceRetreat.Blazor.Fonts.consola.ttf"));
+        var font = family.CreateFont(40, FontStyle.Bold);
 
         if (currentActiveMap != null && currentActiveMap.MapName == mapName)
         {
