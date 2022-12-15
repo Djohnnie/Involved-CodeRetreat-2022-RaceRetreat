@@ -195,6 +195,10 @@
     <None Remove="Graphics\ui-13.png" />
     <None Remove="Maps\map-0.racejson" />
     <None Remove="Maps\map-1.racejson" />
+    <None Remove="Maps\map-2.racejson" />
+    <None Remove="Maps\map-3.racejson" />
+    <None Remove="Maps\map-4.racejson" />
+    <None Remove="Maps\map-5.racejson" />
   </ItemGroup>
 
   <ItemGroup>
@@ -385,6 +389,10 @@
     <EmbeddedResource Include="Graphics\ui-12.png" />
     <EmbeddedResource Include="Graphics\ui-13.png" />
     <EmbeddedResource Include="Maps\map-0.racejson" />
+    <EmbeddedResource Include="Maps\map-2.racejson" />
+    <EmbeddedResource Include="Maps\map-3.racejson" />
+    <EmbeddedResource Include="Maps\map-4.racejson" />
+    <EmbeddedResource Include="Maps\map-5.racejson" />
   </ItemGroup>
 
   <ItemGroup>
