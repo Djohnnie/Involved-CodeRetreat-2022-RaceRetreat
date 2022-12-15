@@ -23,7 +23,7 @@ public class MapRunner
         _configurationHelper = configurationHelper;
     }
 
-    public void SetupMap()
+    public async Task SetupMap()
     {
         var startTile = _map.Tiles.FirstOrDefault(x => x.IsStart);
 
@@ -34,6 +34,9 @@ public class MapRunner
 
         _map.Tiles.ForEach(x => x.Players.Clear());
 
+        var configuration = await _configurationHelper.Refresh();
+
+        _players.ForEach(x => x.Points = configuration.DefaultPoints);
         startTile.Players = _players.ToList();
 
         _plays = new List<Play>();
@@ -64,7 +67,7 @@ public class MapRunner
 
         if (_currentRound > _map.Rounds)
         {
-            SetupMap();
+            await SetupMap();
 
             _currentRound = 0;
         }

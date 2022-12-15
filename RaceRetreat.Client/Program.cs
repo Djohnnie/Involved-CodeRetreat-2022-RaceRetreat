@@ -28,7 +28,18 @@ _connection.On<GameState>("ReceiveGameState", async gameState =>
 
     Console.WriteLine($"{gameState.PlayerName} | {gameState.MapName} | {gameState.CurrentRound}/{gameState.Rounds}");
 
-    await _connection.SendAsync("ExecuteMoveAction", Direction.East);
+    Direction? direction = gameState.CurrentRound switch
+    {
+        >= 0 and <= 7 => Direction.East,
+        >= 8 and <= 11 => Direction.South,
+        >= 12 and <= 18 => Direction.East,
+        _ => null
+    };
+
+    if (direction != null)
+    {
+        await _connection.SendAsync("ExecuteMoveAction", direction);
+    }
 });
 
 await _connection.StartAsync();
