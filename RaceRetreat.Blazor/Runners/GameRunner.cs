@@ -9,6 +9,7 @@ public class GameRunner
     private readonly LevelsHelper _levelsHelper;
     private readonly PlaysHelper _playsHelper;
     private readonly ILogger<GameRunner> _logger;
+    private readonly ActionLogHelper _actionLogHelper;
     private readonly ConfigurationHelper _configurationHelper;
     private MapRunner? _activeMapRunner = null;
     private MapState? _lastMapState = null;
@@ -21,11 +22,13 @@ public class GameRunner
         LevelsHelper levelsHelper,
         PlaysHelper playsHelper,
         ILogger<GameRunner> logger,
+        ActionLogHelper actionLogHelper,
         ConfigurationHelper configurationHelper)
     {
         _levelsHelper = levelsHelper;
         _playsHelper = playsHelper;
         _logger = logger;
+        _actionLogHelper = actionLogHelper;
         _configurationHelper = configurationHelper;
     }
 
@@ -57,8 +60,11 @@ public class GameRunner
     {
         List<Player> players = await _playsHelper.GetPlayers();
         var map = await _levelsHelper.GetMapByName(mapName);
-        _activeMapRunner = new MapRunner(map.Map, map.MapName, players, _configurationHelper);
-        _activeMapRunner.SetupMap();
+        _activeMapRunner = new MapRunner(map.Map, map.MapName, players, _actionLogHelper, _configurationHelper);
+
+        _actionLogHelper.Log($"Active map set to '{mapName}'");
+
+        await _activeMapRunner.SetupMap();
     }
 
     public Task AddAction(IRaceAction action)

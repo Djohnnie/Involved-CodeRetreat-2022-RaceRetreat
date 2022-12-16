@@ -6,13 +6,22 @@ public class MoveAction : IRaceAction
     public string PlayerName { get; set; }
 
 
-    public void ExecuteAction(RaceMap map, Configuration configuration)
+    public void ExecuteAction(RaceMap map, Configuration configuration, Action<string> logger)
     {
         var location = map.LocatePlayer(PlayerName);
         var player = location.Players.FirstOrDefault(x => x.PlayerName == PlayerName);
 
-        if (player == null || player.Attacked)
+        if (player == null)
+        {
             return;
+        }
+
+        if (player.Attacked)
+        {
+            logger($"{PlayerName} is attacked and cannot move!");
+
+            return;
+        }
 
         RaceTile? newLocation = null;
 
@@ -34,10 +43,16 @@ public class MoveAction : IRaceAction
         }
 
         if (newLocation != null)
-            SetupNewLocation(location, newLocation, player, configuration);
+        {
+            SetupNewLocation(location, newLocation, player, configuration, logger);
+        }
+        else
+        {
+            logger($"{PlayerName} cannot move to the {Direction} because there is nothing there!");
+        }
     }
 
-    private void SetupNewLocation(RaceTile oldLocation, RaceTile newLocation, Player player, Configuration configuration)
+    private void SetupNewLocation(RaceTile oldLocation, RaceTile newLocation, Player player, Configuration configuration, Action<string> logger)
     {
         if (newLocation.IsDrivable && !newLocation.HasRock)
         {
@@ -46,14 +61,31 @@ public class MoveAction : IRaceAction
             oldLocation.Players.Remove(player);
             newLocation.Players.Add(player);
 
-            //todo appsettings
             if (newLocation.HasOil)
-                player.OilTicksRemaining = 4;
+            {
+                player.OilTicksRemaining = configuration.OilDamage;
+
+                logger($"{PlayerName} drove into an oil spill!");
+            }
+        }
+        else
+        {
+            if (newLocation.HasRock)
+            {
+                logger($"{PlayerName} drove into a rock!");
+            }
+
+            if (!newLocation.IsDrivable)
+            {
+                logger($"{PlayerName} cannot move to the {Direction}, because there is no road there!");
+            }
         }
 
         if (newLocation.IsEnd)
         {
             player.Points -= configuration.DefaultPoints;
+
+            logger($"{PlayerName} has reached the finish line!");
         }
     }
 }

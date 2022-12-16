@@ -6,17 +6,40 @@ public class PlaceRockAction : IRaceAction
     public int Y { get; set; }
     public string PlayerName { get; set; }
 
-    //Todo make random?
-    public void ExecuteAction(RaceMap map, Configuration configuration)
+    public void ExecuteAction(RaceMap map, Configuration configuration, Action<string> logger)
     {
         var location = map.LocatePlayer(PlayerName);
         var player = location.Players.FirstOrDefault(x => x.PlayerName == PlayerName);
 
-        if (player == null || player.Attacked || player.RocksRemaining == 0)
+        if (player == null)
+        {
             return;
+        }
+
+        if (player.Attacked)
+        {
+            logger($"{PlayerName} is attacked and cannot place a rock!");
+
+            return;
+        }
+
+        if (player.RocksRemaining <= 0)
+        {
+            logger($"{PlayerName} has no rocks available to create a rock!");
+
+            return;
+        }
 
         if (map[X, Y].IsDrivable)
+        {
             map[X, Y].Overlay = OverlayKind.O_21;
+
+            logger($"{PlayerName} has successfully created a rock!");
+        }
+        else
+        {
+            logger($"{PlayerName} cannot create a rock on a non-drivable tile!");
+        }
 
         player.RocksRemaining--;
     }

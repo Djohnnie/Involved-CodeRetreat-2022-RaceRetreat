@@ -10,16 +10,20 @@ public class MapRunner
     private readonly RaceMap _map;
     private readonly string _mapName;
     private readonly List<Player> _players;
+    private readonly ActionLogHelper _actionLogHelper;
     private readonly ConfigurationHelper _configurationHelper;
     private List<Play> _plays;
 
     private int _currentRound = 0;
 
-    public MapRunner(RaceMap map, string mapName, List<Player> players, ConfigurationHelper configurationHelper)
+    public MapRunner(
+        RaceMap map, string mapName, List<Player> players,
+        ActionLogHelper actionLogHelper, ConfigurationHelper configurationHelper)
     {
         _map = map;
         _mapName = mapName;
         _players = players;
+        _actionLogHelper = actionLogHelper;
         _configurationHelper = configurationHelper;
     }
 
@@ -64,6 +68,8 @@ public class MapRunner
     public async Task<MapState> Tick(List<IRaceAction> tickActions)
     {
         _currentRound++;
+
+        _actionLogHelper.Log($"Round {_currentRound}/{_map.Rounds} for map '{_mapName}'");
 
         if (_currentRound > _map.Rounds)
         {
@@ -117,16 +123,16 @@ public class MapRunner
     {
         //firstAttackActions
         var attackActions = tickActions.Where(x => x.GetType() == typeof(AttackPlayerAction)).ToList();
-        attackActions.ForEach(x => x.ExecuteAction(_map, configuration));
+        attackActions.ForEach(x => x.ExecuteAction(_map, configuration, log => _actionLogHelper.Log(log)));
 
         //ThenMoveMineActions
         var moveMineActions = tickActions
             .Where(x => x.GetType() == typeof(MoveAction) || x.GetType() == typeof(MineRockAction)).ToList();
-        moveMineActions.ForEach(x => x.ExecuteAction(_map, configuration));
+        moveMineActions.ForEach(x => x.ExecuteAction(_map, configuration, log => _actionLogHelper.Log(log)));
 
         //ThenOilRockActions
         var oilRockActions = tickActions
             .Where(x => x.GetType() == typeof(PlaceOilAction) || x.GetType() == typeof(PlaceRockAction)).ToList();
-        oilRockActions.ForEach(x => x.ExecuteAction(_map, configuration));
+        oilRockActions.ForEach(x => x.ExecuteAction(_map, configuration, log => _actionLogHelper.Log(log)));
     }
 }

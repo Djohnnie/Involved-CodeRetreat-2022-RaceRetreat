@@ -1,4 +1,5 @@
-﻿using RaceRetreat.Blazor.Hubs;
+﻿using RaceRetreat.Blazor.Helpers;
+using RaceRetreat.Blazor.Hubs;
 using RaceRetreat.Blazor.Runners;
 using RaceRetreat.Contracts;
 using System.Diagnostics;
@@ -9,11 +10,13 @@ public class GameWorker : BackgroundService
 {
     private readonly GameRunner _gameRunner;
     private readonly GameHub _gameHub;
+    private readonly ActionLogHelper _actionLogHelper;
 
-    public GameWorker(GameRunner gameRunner, GameHub gameHub)
+    public GameWorker(GameRunner gameRunner, GameHub gameHub, ActionLogHelper actionLogHelper)
     {
         _gameRunner = gameRunner;
         _gameHub = gameHub;
+        _actionLogHelper = actionLogHelper;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,6 +40,7 @@ public class GameWorker : BackgroundService
                 Rounds = lastMapState.Rounds,
                 CurrentRound = lastMapState.CurrentRound,
                 Map = lastMapState.Map,
+                ActionLog = _actionLogHelper.GetTopLogs()
             });
 
             // Calculate remaining time to sleep.

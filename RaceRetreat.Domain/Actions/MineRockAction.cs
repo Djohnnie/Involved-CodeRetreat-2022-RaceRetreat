@@ -5,13 +5,22 @@ public class MineRockAction : IRaceAction
     public Direction Direction { get; set; }
     public string PlayerName { get; set; }
 
-    public void ExecuteAction(RaceMap map, Configuration configuration)
+    public void ExecuteAction(RaceMap map, Configuration configuration, Action<string> logger)
     {
         var location = map.LocatePlayer(PlayerName);
         var player = location.Players.FirstOrDefault(x => x.PlayerName == PlayerName);
 
-        if (player == null || player.Attacked)
+        if (player == null)
+        {
             return;
+        }
+
+        if (player.Attacked)
+        {
+            logger($"{PlayerName} is attacked and cannot mine a rock!");
+
+            return;
+        }
 
         RaceTile? newLocation = null;
 
@@ -33,14 +42,34 @@ public class MineRockAction : IRaceAction
         }
 
         if (newLocation != null)
-            SetupNewLCheckAndMineLocation(newLocation);
+        {
+            SetupNewLCheckAndMineLocation(newLocation, logger);
+        }
+        else
+        {
+            logger($"{PlayerName} cannot mine a rock that is not there!");
+        }
     }
 
-    private void SetupNewLCheckAndMineLocation(RaceTile newLocation)
+    private void SetupNewLCheckAndMineLocation(RaceTile newLocation, Action<string> logger)
     {
         if (newLocation.IsDrivable && newLocation.HasRock)
         {
             newLocation.Overlay = OverlayKind.O_00;
+
+            logger($"{PlayerName} successfully mined a rock!");
+
+            return;
+        }
+
+        if (!newLocation.IsDrivable)
+        {
+            logger($"{PlayerName} cannot mine a rock that is not on a road!");
+        }
+
+        if (!newLocation.HasRock)
+        {
+            logger($"{PlayerName} cannot mine a rock that is not there!");
         }
     }
 }

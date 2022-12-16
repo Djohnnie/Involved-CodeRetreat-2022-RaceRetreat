@@ -19,6 +19,7 @@ public class ConfigurationHelper
         {
             PointsPerSuccessfulMove = await _azureTableHelper.GetConfiguration("PointsPerSuccessfulMove"),
             DefaultPoints = await _azureTableHelper.GetConfiguration("DefaultPoints"),
+            OilDamage = await _azureTableHelper.GetConfiguration("OilDamage"),
         };
     }
 }

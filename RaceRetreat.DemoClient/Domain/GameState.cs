@@ -7,4 +7,5 @@ internal class GameState
     public int CurrentRound { get; set; }
 
     public RaceMap Map { get; set; }
+    public List<ActionLog> ActionLog { get; set; }
 }

@@ -1,0 +1,46 @@
+﻿@using RaceRetreat.Blazor.Helpers
+@using RaceRetreat.Blazor.Runners;
+@using RaceRetreat.Contracts
+@using RaceRetreat.Domain;
+
+@page "/logs"
+@inject ActionLogHelper _actionLogHelper
+
+<h1>Action Logs</h1>
+
+<p><a href="_api/maps/map-5" target="_blank">Download map-5 JSON</a></p>
+
+@if (_actionLogs == null)
+{
+    <p><em>Bezig met laden van data...</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var log in _actionLogs ?? new List<ActionLog>())
+        {
+            <li><b>@log.TimeStamp.ToLocalTime().ToString("HH:mm:ss")</b> @log.Message</li>
+        }
+    </ul>
+}
+
+@code
+{
+    private List<ActionLog>? _actionLogs;
+
+    protected async void RunTimer(int interval)
+    {
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(interval));
+
+        while (await timer.WaitForNextTickAsync())
+        {
+            _actionLogs = _actionLogHelper.GetTopLogs();
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        RunTimer(1);
+    }
+}
