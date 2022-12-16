@@ -1,8 +1,6 @@
-﻿using RaceRetreat.Domain;
+﻿namespace RaceRetreat.DemoClient.Domain;
 
-namespace RaceRetreat.Contracts;
-
-public class GameState
+internal class GameState
 {
     public string MapName { get; set; }
     public int Rounds { get; set; }

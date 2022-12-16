@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceRetreat.Blazor", "RaceR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceRetreat.Contracts", "RaceRetreat.Contracts\RaceRetreat.Contracts.csproj", "{3D8C8A88-D010-425F-BCB7-32234587697D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceRetreat.Client", "RaceRetreat.Client\RaceRetreat.Client.csproj", "{79E190A2-52BD-4F0A-B78B-6441A4928D4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceRetreat.Client", "RaceRetreat.Client\RaceRetreat.Client.csproj", "{79E190A2-52BD-4F0A-B78B-6441A4928D4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceRetreat.DemoClient", "RaceRetreat.DemoClient\RaceRetreat.DemoClient.csproj", "{8A1DF1CB-803E-4B50-986F-7B369DE842F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{79E190A2-52BD-4F0A-B78B-6441A4928D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79E190A2-52BD-4F0A-B78B-6441A4928D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{79E190A2-52BD-4F0A-B78B-6441A4928D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A1DF1CB-803E-4B50-986F-7B369DE842F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A1DF1CB-803E-4B50-986F-7B369DE842F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A1DF1CB-803E-4B50-986F-7B369DE842F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A1DF1CB-803E-4B50-986F-7B369DE842F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

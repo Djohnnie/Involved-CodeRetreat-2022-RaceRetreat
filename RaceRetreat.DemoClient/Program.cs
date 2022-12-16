@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using RaceRetreat.Contracts;
-using RaceRetreat.Domain;
+using RaceRetreat.DemoClient.Domain;
+using RaceRetreat.DemoClient.Extensions;
+
 
 Console.WriteLine("RaceRetreat Client");
 Console.WriteLine("------------------");
 Console.WriteLine();
+
+const string USERNAME = "Baggeraar";
+
 
 const string HOST = "https://raceretreat.azurewebsites.net/_signalr/game";
 var random = new Random();
@@ -19,11 +23,15 @@ _connection.Closed += async (error) =>
     if (!closing)
     {
         await Task.Delay(random.Next(0, 5) * 1000);
+
         await _connection.StartAsync();
+        await _connection.Login(USERNAME);
     }
 };
 
-_connection.On<GameState>("ReceiveGameState", async gameState =>
+
+
+_connection.OnReceiveGameState(async gameState =>
 {
     Console.WriteLine($"{gameState.MapName} | {gameState.CurrentRound}/{gameState.Rounds}");
 
@@ -37,11 +45,19 @@ _connection.On<GameState>("ReceiveGameState", async gameState =>
 
     if (direction != null)
     {
-        await _connection.SendAsync("ExecuteMoveAction", direction);
+        await _connection.ExecuteMoveAction(direction.Value);
     }
+
+    await _connection.ExecuteAttackPlayerAction("Joske");
+
+    await _connection.ExecutePlaceOilAction(4, 6);
+
+    await _connection.ExecutePlaceRockAction(5, 7);
+
+    await _connection.ExecuteMineRockAction(Direction.North);
 });
 
 await _connection.StartAsync();
-await _connection.SendAsync("Login", "djohnnie");
+await _connection.Login(USERNAME);
 
 Console.ReadKey();
