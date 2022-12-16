@@ -22,6 +22,6 @@ public class ActionLogHelper
 
     public List<ActionLog> GetTopLogs()
     {
-        return ActionLogs.OrderByDescending(x => x.TimeStamp).Take(25).ToList();
+        return ActionLogs.OrderByDescending(x => x.TimeStamp).Take(50).ToList();
     }
 }

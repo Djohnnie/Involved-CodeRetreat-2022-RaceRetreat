@@ -92,6 +92,16 @@ public class GameRunner
             var playerActionValues = playerActions.Value;
             var isOiled = _activeMapRunner.IsPlayerOiled(playerActions.Key);
 
+            if (!isOiled && playerActionValues.Count > 2)
+            {
+                _actionLogHelper.Log($"{playerActions.Key} has sent too many actions! Only the last two will be processed.");
+            }
+
+            if (isOiled && playerActionValues.Count > 1)
+            {
+                _actionLogHelper.Log($"{playerActions.Key} has sent too many actions! Only the last will be processed because {playerActions.Key} is oiled.");
+            }
+
             newList.AddRange(isOiled ? playerActionValues.TakeLast(1) : playerActionValues.TakeLast(2));
         }
 

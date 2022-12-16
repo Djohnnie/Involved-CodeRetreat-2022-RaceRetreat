@@ -61,6 +61,8 @@ public class MoveAction : IRaceAction
             oldLocation.Players.Remove(player);
             newLocation.Players.Add(player);
 
+            logger($"{PlayerName} successfully raced to the {Direction}!");
+
             if (newLocation.HasOil)
             {
                 player.OilTicksRemaining = configuration.OilDamage;
