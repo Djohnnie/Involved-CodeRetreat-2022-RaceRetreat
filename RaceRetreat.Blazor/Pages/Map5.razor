@@ -52,7 +52,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var interval = _gameRunner.CurrentMapState?.MapName == "map-5" ? _gameRunner.CurrentMapState.TimePerRound : 1000;
+        var interval = _gameRunner.CurrentMapState?.MapName == "map-5" ? _gameRunner.CurrentMapState.TimePerRound : 1;
 
         RunTimer(interval);
     }

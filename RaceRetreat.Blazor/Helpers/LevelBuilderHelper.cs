@@ -177,7 +177,7 @@ public class LevelBuilderHelper
         if (currentActiveMap != null && currentActiveMap.MapName == mapName)
         {
             var textLeft = "Total rounds:";
-            var textRight = $"Time per round: {currentActiveMap.TimePerRound}ms";
+            var textRight = $"Time per round: {currentActiveMap.TimePerRound} sec.";
 
             var offsetX = 50;
 
