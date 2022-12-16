@@ -39,55 +39,50 @@ public class LevelBuilderHelper
 
         var (width, height) = (map.Width * TILE_SIZE, map.Height * TILE_SIZE);
 
-        var mapImage = _graphicsCacheHelper.GetLevelByName(mapName, () =>
+        var mapImage = new Image<Rgba32>(width, height);
+
+        mapImage.Mutate(imageContext =>
         {
-            var mapImage = new Image<Rgba32>(width, height);
+            var backgroundColor = Rgba32.ParseHex("#ffffff");
+            imageContext.BackgroundColor(backgroundColor);
 
-            mapImage.Mutate(imageContext =>
+            foreach (var tile in map.Tiles)
             {
-                var backgroundColor = Rgba32.ParseHex("#ffffff");
-                imageContext.BackgroundColor(backgroundColor);
-
-                foreach (var tile in map.Tiles)
+                if (tile.IsUsed)
                 {
-                    if (tile.IsUsed)
+                    var backgroundBitmap = _graphicsCacheHelper.GetImageByTileKind(TileKind.R1_00, TILE_SIZE);
+                    var tileBitmap = _graphicsCacheHelper.GetImageByTileKind(tile.Kind, TILE_SIZE);
+                    var overlayBitmap = _graphicsCacheHelper.GetImageByOverlayKind(tile.Overlay, TILE_SIZE);
+                    var tileLocation = CalculateBounds(tile.X, tile.Y);
+
+                    imageContext.DrawImage(backgroundBitmap, tileLocation, new GraphicsOptions
                     {
-                        var backgroundBitmap = _graphicsCacheHelper.GetImageByTileKind(TileKind.R1_00, TILE_SIZE);
-                        var tileBitmap = _graphicsCacheHelper.GetImageByTileKind(tile.Kind, TILE_SIZE);
-                        var overlayBitmap = _graphicsCacheHelper.GetImageByOverlayKind(tile.Overlay, TILE_SIZE);
-                        var tileLocation = CalculateBounds(tile.X, tile.Y);
+                        AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
+                        Antialias = false,
+                        AntialiasSubpixelDepth = 16,
+                        BlendPercentage = 1,
+                        ColorBlendingMode = PixelColorBlendingMode.Normal
+                    });
 
-                        imageContext.DrawImage(backgroundBitmap, tileLocation, new GraphicsOptions
-                        {
-                            AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
-                            Antialias = false,
-                            AntialiasSubpixelDepth = 16,
-                            BlendPercentage = 1,
-                            ColorBlendingMode = PixelColorBlendingMode.Normal
-                        });
+                    imageContext.DrawImage(tileBitmap, tileLocation, new GraphicsOptions
+                    {
+                        AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
+                        Antialias = false,
+                        AntialiasSubpixelDepth = 16,
+                        BlendPercentage = 1,
+                        ColorBlendingMode = PixelColorBlendingMode.Normal
+                    });
 
-                        imageContext.DrawImage(tileBitmap, tileLocation, new GraphicsOptions
-                        {
-                            AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
-                            Antialias = false,
-                            AntialiasSubpixelDepth = 16,
-                            BlendPercentage = 1,
-                            ColorBlendingMode = PixelColorBlendingMode.Normal
-                        });
-
-                        imageContext.DrawImage(overlayBitmap, tileLocation, new GraphicsOptions
-                        {
-                            AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
-                            Antialias = false,
-                            AntialiasSubpixelDepth = 16,
-                            BlendPercentage = 1,
-                            ColorBlendingMode = PixelColorBlendingMode.Normal
-                        });
-                    }
+                    imageContext.DrawImage(overlayBitmap, tileLocation, new GraphicsOptions
+                    {
+                        AlphaCompositionMode = PixelAlphaCompositionMode.SrcOver,
+                        Antialias = false,
+                        AntialiasSubpixelDepth = 16,
+                        BlendPercentage = 1,
+                        ColorBlendingMode = PixelColorBlendingMode.Normal
+                    });
                 }
-            });
-
-            return mapImage;
+            }
         });
 
         mapImage = mapImage.Clone(imageContext =>
