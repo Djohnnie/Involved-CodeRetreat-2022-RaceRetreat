@@ -82,6 +82,9 @@ public class MapRunner
             var configuration = await _configurationHelper.Refresh();
             HandleActions(tickActions, configuration);
 
+            _players.ForEach(x => x.Attacked = false);
+            _players.ForEach(x => x.OilTicksRemaining = x.OilTicksRemaining > 0 ? x.OilTicksRemaining - 1 : 0);
+
             foreach (var tile in _map.Tiles)
             {
                 foreach (var player in tile.Players)
