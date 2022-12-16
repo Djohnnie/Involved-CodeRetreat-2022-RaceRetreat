@@ -23,7 +23,7 @@ else if (_players.Count == 0)
 else
 {
     <p>
-        @foreach (var player in _players ?? new List<Player>())
+        @foreach (var player in (_players ?? new List<Player>()).OrderBy(x => x.Points))
         {
             var cssClass = $"solutionColor{player.Index}";
             <span class="@cssClass"> [ @player.PlayerName - @player.Points points ] </span>
@@ -40,7 +40,7 @@ else
 
     protected async void RunTimer(int interval)
     {
-        using var timer = new PeriodicTimer(TimeSpan.FromMilliseconds(interval));
+        using var timer = new PeriodicTimer(TimeSpan.FromSeconds(interval));
 
         while (await timer.WaitForNextTickAsync())
         {

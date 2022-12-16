@@ -40,7 +40,7 @@ public class GameWorker : BackgroundService
             });
 
             // Calculate remaining time to sleep.
-            var delay = lastMapState.TimePerRound - (int)sw.ElapsedMilliseconds;
+            var delay = lastMapState.TimePerRound * 1000 - (int)sw.ElapsedMilliseconds;
             await Task.Delay(delay < 0 ? 0 : delay);
         }
     }
