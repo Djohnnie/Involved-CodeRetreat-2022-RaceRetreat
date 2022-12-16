@@ -35,7 +35,7 @@ public class LevelBuilderHelper
 
         var mapResourceName = BuildMapResourceName(mapName);
         var mapJson = EmbeddedResourceHelper.GetMapByResourceName(mapResourceName);
-        var map = JsonSerializer.Deserialize<RaceMap>(mapJson);
+        var map = _gameRunner.CurrentMapState?.Map ?? JsonSerializer.Deserialize<RaceMap>(mapJson);
 
         var (width, height) = (map.Width * TILE_SIZE, map.Height * TILE_SIZE);
 
