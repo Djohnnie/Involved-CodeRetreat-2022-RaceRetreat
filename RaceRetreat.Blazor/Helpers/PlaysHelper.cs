@@ -16,13 +16,17 @@ public class PlaysHelper
     {
         var players = new GetPlayersResponse();
 
+        var index = 1;
+
         await foreach (var player in _azureTableHelper.GetPlayers())
         {
             players.Add(new Player
             {
-                Index = 1,
+                Index = index,
                 PlayerName = player.RowKey
             });
+
+            index++;
         }
 
         return players;
